@@ -21,8 +21,11 @@ public class TwinStickMovement : MonoBehaviour
 
     private Vector3 playerVelocity;
 
+
     private PlayerControls playerControls;
     private PlayerInput playerInput;
+
+    private bool isTopDown = true;
 
     private void Awake()
     {
@@ -47,6 +50,11 @@ public class TwinStickMovement : MonoBehaviour
         HandleInput();
         HandleMovement();
         HandleRotation();
+
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            isTopDown = !isTopDown;
+        }
     }
 
     void HandleInput()
@@ -57,7 +65,17 @@ public class TwinStickMovement : MonoBehaviour
 
     void HandleMovement()
     {
-        Vector3 move = new Vector3(movement.x, 0, movement.y);
+        Vector3 move;
+
+        if (isTopDown)
+        {
+            move = new Vector3(movement.x, 0, movement.y);
+        }
+        else
+        {
+            move = new Vector3(movement.x, 0, 0);
+        }
+
         controller.Move(move * Time.deltaTime * playerSpeed);
 
         playerVelocity.y += gravityValue * Time.deltaTime;
@@ -81,14 +99,17 @@ public class TwinStickMovement : MonoBehaviour
         }
         else
         {
-            Ray ray = Camera.main.ScreenPointToRay(aim);
-            Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
-            float rayDistance;
-
-            if(groundPlane.Raycast(ray, out rayDistance))
+            if (isTopDown)
             {
-                Vector3 point = ray.GetPoint(rayDistance);
-                LookAt(point);
+                Ray ray = Camera.main.ScreenPointToRay(aim);
+                Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+                float rayDistance;
+
+                if (groundPlane.Raycast(ray, out rayDistance))
+                {
+                    Vector3 point = ray.GetPoint(rayDistance);
+                    LookAt(point);
+                }
             }
         }
     }

@@ -25,7 +25,7 @@ public class TwinStickMovement : MonoBehaviour
     private PlayerControls playerControls;
     private PlayerInput playerInput;
 
-    private bool isTopDown = true;
+    public static bool isTopDown = true;
 
     private void Awake()
     {
@@ -51,10 +51,6 @@ public class TwinStickMovement : MonoBehaviour
         HandleMovement();
         HandleRotation();
 
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            isTopDown = !isTopDown;
-        }
     }
 
     void HandleInput()

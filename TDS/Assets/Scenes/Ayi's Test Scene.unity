@@ -395,7 +395,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!114 &410087042
 MonoBehaviour:
@@ -453,8 +453,8 @@ MonoBehaviour:
   m_StreamingVersion: 20170927
   m_Priority: 10
   m_StandbyUpdate: 2
-  m_LookAt: {fileID: 3417107233431835362}
-  m_Follow: {fileID: 3417107233431835362}
+  m_LookAt: {fileID: 2120071297}
+  m_Follow: {fileID: 2120071297}
   m_Lens:
     FieldOfView: 60
     OrthographicSize: 5
@@ -464,7 +464,7 @@ MonoBehaviour:
     ModeOverride: 2
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.2519231, y: 1}
+    m_SensorSize: {x: 1.5144928, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -566,7 +566,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1100559037
 PrefabInstance:
@@ -667,9 +667,9 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -5495902117074765545, guid: 5247e5faf2e6d5442ba8fb7a5130a29f, type: 3}
---- !u!4 &3417107233431835362 stripped
+--- !u!4 &2120071297 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 5661308279412039198, guid: ce859258931833842adf0597343806f1,
+  m_CorrespondingSourceObject: {fileID: 4245614251294022062, guid: ce859258931833842adf0597343806f1,
     type: 3}
   m_PrefabInstance: {fileID: 7060800950533508348}
   m_PrefabAsset: {fileID: 0}
@@ -820,7 +820,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!20 &4872922341745883398
 Camera:
@@ -927,8 +927,8 @@ MonoBehaviour:
   m_StreamingVersion: 20170927
   m_Priority: 10
   m_StandbyUpdate: 2
-  m_LookAt: {fileID: 3417107233431835362}
-  m_Follow: {fileID: 3417107233431835362}
+  m_LookAt: {fileID: 2120071297}
+  m_Follow: {fileID: 2120071297}
   m_Lens:
     FieldOfView: 60
     OrthographicSize: 5
@@ -938,7 +938,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.2519231, y: 1}
+    m_SensorSize: {x: 1.5144928, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0

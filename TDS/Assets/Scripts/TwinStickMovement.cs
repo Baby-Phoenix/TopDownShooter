@@ -133,6 +133,7 @@ public class TwinStickMovement : MonoBehaviour
         }
         else
         {
+            //Point on screen from ray
             if (isTopDown)
             {
                 Ray ray = Camera.main.ScreenPointToRay(aim);
@@ -144,6 +145,14 @@ public class TwinStickMovement : MonoBehaviour
                     Vector3 point = ray.GetPoint(rayDistance);
                     LookAt(point);
                 }
+            }
+            else
+            {
+                Vector3 mouseScreenPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, -Camera.main.transform.position.z);
+
+                Vector3 heightCorrectedPoint = new Vector3(Camera.main.ScreenToWorldPoint(mouseScreenPosition).x, transform.position.y, transform.position.z);
+
+                transform.LookAt(heightCorrectedPoint, Vector3.up);
             }
         }
     }

@@ -8,6 +8,9 @@ TagManager:
   - Side
   - TopCam
   - SideCam
+  - Enemy
+  - Bullet
+  - Wall
   layers:
   - Default
   - TransparentFX
@@ -15,9 +18,9 @@ TagManager:
   - Top
   - Water
   - UI
-  - Side
-  - 
-  - 
+  - HitBox
+  - Enemy
+  - Bullet
   - 
   - 
   - 

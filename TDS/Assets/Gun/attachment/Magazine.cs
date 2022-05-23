@@ -5,7 +5,8 @@ using UnityEngine;
 public class Magazine : MonoBehaviour
 {
     //stats control by Magazine
-    public bool IsRayCast; 
+    public bool IsRayCast;
+    public bool CanPenetrate;
     public int magazineSize_B;
     public float KnockbackStrength;
 

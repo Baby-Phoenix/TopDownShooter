@@ -21,6 +21,7 @@ public class Gun : MonoBehaviour
 
     //stats control by Magazine
     public bool IsRayCast;
+    public bool CanPenetrate;
 
     public float bulletspeed;
 
@@ -120,28 +121,67 @@ public class Gun : MonoBehaviour
         //RayCast bullet
         if (IsRayCast)
         {
-            if (Physics.Raycast(attackPoint.position, direction, out rayHit, range, whatIsEnemy))
+            if (!CanPenetrate)
             {
-                Debug.Log(rayHit.collider.name);
-                Target target = rayHit.transform.GetComponent<Target>();
-            
-                if (rayHit.collider.CompareTag("Enemy"))
+                if (Physics.Raycast(attackPoint.position, direction, out rayHit, range, whatIsEnemy))
                 {
-                    Rigidbody rb = rayHit.transform.gameObject.GetComponent<Rigidbody>();
-                    direction.y = 0;
-                    Debug.Log(KnockbackStrength);
-                    rb.AddForce(direction.normalized *KnockbackStrength, ForceMode.Impulse);
-                    target.TakeDamage(damage);
+                    Debug.Log(rayHit.collider.name);
+                    Target target = rayHit.transform.GetComponent<Target>();
+
+                    if (rayHit.collider.CompareTag("Enemy"))
+                    {
+                        Rigidbody rb = rayHit.transform.gameObject.GetComponent<Rigidbody>();
+                        direction.y = 0;
+                        Debug.Log(KnockbackStrength);
+                        rb.AddForce(direction.normalized * KnockbackStrength, ForceMode.Impulse);
+                        target.TakeDamage(damage);
+                    }
+                    //Graphics
+                    Instantiate(bulletHoleGraphic, rayHit.point, Quaternion.Euler(0, 180, 0));
+                    Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
                 }
-                //Graphics
-                Instantiate(bulletHoleGraphic, rayHit.point, Quaternion.Euler(0, 180, 0));
-                Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
+                else
+                {
+                    //Graphics
+                    Instantiate(bulletHoleGraphic, attackPoint.forward * 100, Quaternion.Euler(0, 180, 0));
+                    Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
+                }
             }
             else
             {
-                //Graphics
-                Instantiate(bulletHoleGraphic, attackPoint.forward * 100, Quaternion.Euler(0, 180, 0));
-                Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
+                RaycastHit hit;
+                RaycastHit[] hits;
+                Target target;
+                Rigidbody rb;
+                hits = Physics.RaycastAll(attackPoint.position, direction, range, whatIsEnemy);
+
+                if (hits != null)
+                {
+                    for (int i = 0; i < hits.Length; i++)
+                    {
+                        hit = hits[i];
+
+                        if (hit.collider.CompareTag("Enemy"))
+                        {
+
+                            target = hit.transform.GetComponent<Target>();
+
+                            rb = hit.transform.gameObject.GetComponent<Rigidbody>();
+                            direction.y = 0;
+                            rb.AddForce(direction.normalized * KnockbackStrength, ForceMode.Impulse);
+                            target.TakeDamage(damage);
+                        }
+                        //Graphics
+                        Instantiate(bulletHoleGraphic, hit.point, Quaternion.Euler(0, 180, 0));
+                        Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
+                    }
+                }
+                else
+                {
+                    //Graphics
+                    Instantiate(bulletHoleGraphic, attackPoint.forward * 100, Quaternion.Euler(0, 180, 0));
+                    Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
+                }
             }
         }
         else
@@ -254,6 +294,7 @@ public class Gun : MonoBehaviour
         else
         {
             KnockbackStrength = magazine.GetComponent<Magazine>().KnockbackStrength;
+            CanPenetrate = magazine.GetComponent<Magazine>().CanPenetrate;
         }
 
         magazineSize = MagazineModifer.getMagazineSize();

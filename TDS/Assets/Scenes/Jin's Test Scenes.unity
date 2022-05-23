@@ -740,6 +740,7 @@ MonoBehaviour:
   allowButtonHold: 0
   IsHandLoaded: 1
   IsRayCast: 0
+  CanPenetrate: 0
   bulletspeed: 0
   magazineSize: 5
   magazineSize_B: 0
@@ -756,7 +757,7 @@ MonoBehaviour:
   barrel: {fileID: 1522425860568971478, guid: 6262b33c5fe4c3f4687195b3470fe54e, type: 3}
   chamber: {fileID: 6779993430046693375, guid: a6a94ddd3282d6e488a33fa575ac798b, type: 3}
   scopes: {fileID: 7722164158710398684, guid: 8f328ad7308d3864bbba1e0a8157007b, type: 3}
-  magazine: {fileID: 2363805198242410278, guid: 9a80bfc0457d8294280c76aeea11a34d,
+  magazine: {fileID: 2363805198242410278, guid: b02e2455a1d7ceb4f9d3b8b5985b0913,
     type: 3}
   stock: {fileID: 3385471495623295425, guid: 1acb7cb7494fee349aafe02a35c7ccda, type: 3}
   mod: {fileID: 0}

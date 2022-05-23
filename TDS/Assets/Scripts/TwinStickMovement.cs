@@ -13,10 +13,15 @@ public class TwinStickMovement : MonoBehaviour
     [SerializeField] private float controllerDeadZone = 0.11f;
     [SerializeField] private float gamepadRotateSmoothing = 1000f;
 
+    public Animator anim;
+
     [SerializeField] private bool isGamepad;
 
     private CharacterController controller;
+    private bool isJump = false;
+    private bool isGrounded = false;
 
+    [SerializeField] private float jump;
     private Vector2 movement;
     private Vector2 aim;
 
@@ -58,6 +63,9 @@ public class TwinStickMovement : MonoBehaviour
     {
         movement = playerControls.Controls.Movement.ReadValue<Vector2>();
         aim = playerControls.Controls.Aim.ReadValue<Vector2>();
+        
+        if (!isJump) 
+        jump = playerControls.Controls.Jump.ReadValue<float>();
     }
 
     void HandleMovement()
@@ -66,17 +74,47 @@ public class TwinStickMovement : MonoBehaviour
 
         if (isTopDown)
         {
-            move = new Vector3(movement.x, 0, movement.y);
+
+            //take off jump from here
+
+            if (jump > 0)
+                isJump = true;
+            else
+                isJump = false;
+
+            move = new Vector3(movement.x, jump, movement.y);
+            anim.SetBool("IsJump", isJump);
         }
         else
         {
-            move = new Vector3(movement.x, 0, 0);
+            if (jump > 0)
+                isJump = true;
+            else
+                isJump = false;
+
+            move = new Vector3(movement.x, jump, 0);
+            anim.SetBool("IsJump", isJump);
         }
 
+       
         controller.Move(move * Time.deltaTime * playerSpeed);
+        anim.SetBool("IsRun", move.magnitude > 0);
+
 
         playerVelocity.y += gravityValue * Time.deltaTime;
         controller.Move(playerVelocity * Time.deltaTime);
+
+        isGrounded = false;
+
+        if (controller.isGrounded)
+        {
+            playerVelocity.y = 0; 
+            isJump = false;
+            isGrounded = true;
+        }
+
+        anim.SetFloat("yVelocity", playerVelocity.y);
+        anim.SetBool("IsGround", isGrounded);
     }
 
     void HandleRotation()
@@ -96,6 +134,7 @@ public class TwinStickMovement : MonoBehaviour
         }
         else
         {
+            //Point on screen from ray
             if (isTopDown)
             {
                 Ray ray = Camera.main.ScreenPointToRay(aim);
@@ -107,6 +146,14 @@ public class TwinStickMovement : MonoBehaviour
                     Vector3 point = ray.GetPoint(rayDistance);
                     LookAt(point);
                 }
+            }
+            else
+            {
+                Vector3 mouseScreenPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, -Camera.main.transform.position.z);
+
+                Vector3 heightCorrectedPoint = new Vector3(Camera.main.ScreenToWorldPoint(mouseScreenPosition).x, transform.position.y, transform.position.z);
+
+                transform.LookAt(heightCorrectedPoint, Vector3.up);
             }
         }
     }

@@ -111,7 +111,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsRayCast: 0
+  CanPenetrate: 0
   magazineSize_B: 40
+  KnockbackStrength: 0
+  whatIsEnemies:
+    serializedVersion: 2
+    m_Bits: 128
   bulletPrefab: {fileID: 3288182100125077833, guid: 1eb0194031abd504890c6d9071dc1cd8,
     type: 3}
   bulletspeed: 10

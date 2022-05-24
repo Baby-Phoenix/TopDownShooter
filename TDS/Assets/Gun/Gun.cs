@@ -35,6 +35,10 @@ public class Gun : MonoBehaviour
 
     float KnockbackStrength;
 
+    //stats control by Mod
+    //Explosive
+
+
     //bools 
     bool shooting, readyToShoot, reloading;
 
@@ -53,6 +57,7 @@ public class Gun : MonoBehaviour
     public GameObject scopes;
     public GameObject magazine;
     public GameObject stock;
+    public GameObject currentMod;
     public GameObject mod;
 
 
@@ -60,18 +65,42 @@ public class Gun : MonoBehaviour
 
     private void Awake()
     {
+        UpdateAttachment();
+        bulletsLeft = magazineSize;
+        readyToShoot = true;
+    }
+
+    private void UpdateAttachment()
+    {
         GetBarrel();
         GetChamber();
         GetScope();
         GetMagazine();
         GetStock();
-        bulletsLeft = magazineSize;
-        readyToShoot = true;
+
+        if (mod != currentMod&& currentMod!=null)
+        {
+            Debug.Log(1);
+            currentMod.GetComponent<Mod>().undoMod(gameObject);
+            GetMod();
+            currentMod = mod;
+        }
+        else if (mod != currentMod)
+        {
+            Debug.Log(2);
+            GetMod();
+            currentMod = mod;
+        }
+        else
+        {
+            GetMod();
+            currentMod = mod;
+        }
     }
     private void Update()
     {
         MyInput();
-
+        UpdateAttachment();
         text.SetText(bulletsLeft + " / " + magazineSize);
     }
     private void MyInput()
@@ -304,5 +333,13 @@ public class Gun : MonoBehaviour
     {
         Stock StockModifer = stock.GetComponent<Stock>();
         spread = spread - StockModifer.spreadModifier(spread_B);
+    }
+    private void GetMod()
+    {
+        if (mod != null)
+        {
+            Mod modModifer = mod.GetComponent<Mod>();
+            mod.GetComponent<Mod>().initMod(gameObject);
+        }
     }
 }

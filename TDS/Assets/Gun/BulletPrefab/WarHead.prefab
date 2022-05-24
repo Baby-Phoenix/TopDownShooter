@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3288182100125077837}
   - component: {fileID: 3288182100125077834}
   - component: {fileID: 3288182100125077835}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WarHead
   m_TagString: Bullet
   m_Icon: {fileID: 0}
@@ -127,8 +127,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc8f0992a62195c409909dae5b8cbc31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletspeed: 10
-  rb: {fileID: 3288182100125077834}
-  dir: {x: -0.59070903, y: -0.14878374, z: -0.7779826}
+  bulletspeed: 0
+  rb: {fileID: 0}
+  dir: {x: 0, y: 0, z: 0}
+  whatIsEnemies:
+    serializedVersion: 2
+    m_Bits: 128
+  isExplosive: 0
+  explosion: {fileID: 0}
+  explosionDamage: 0
+  explosionRange: 0
+  explosionForce: 0
   muzzleFlash: {fileID: 279531126616779420, guid: 6cfce6a33605e0f4eafd8adda7f2201c,
     type: 3}
+  explodeOnTouch: 1

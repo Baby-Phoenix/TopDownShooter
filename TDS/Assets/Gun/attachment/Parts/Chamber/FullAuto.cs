@@ -12,12 +12,5 @@ public class FullAuto : Chamber
         timeBetweenShooting_M = 0.1f;
     }
 
-    public override float damageModifier(float baseDamage) { 
-        return baseDamage* damage_M; 
-    }
 
-    public override float FiringSpeedModifier(float baseFiringSpeed)
-    {
-        return baseFiringSpeed * timeBetweenShooting_M;
-    }
 }

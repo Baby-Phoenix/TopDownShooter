@@ -9,6 +9,15 @@ public class Chamber : MonoBehaviour
 
     public float damage_M;
     public float timeBetweenShooting_M;
-    public virtual float damageModifier(float baseDamage) { return 0; }
-    public virtual float FiringSpeedModifier(float baseFiringSpeed) { return 0; }
+
+
+    public virtual float damageModifier(float baseDamage)
+    {
+        return baseDamage * damage_M;
+    }
+
+    public virtual float FiringSpeedModifier(float baseFiringSpeed)
+    {
+        return baseFiringSpeed * timeBetweenShooting_M;
+    }
 }

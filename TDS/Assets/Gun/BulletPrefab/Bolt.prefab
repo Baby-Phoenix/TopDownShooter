@@ -58,7 +58,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f722adddb9c5d4b419f15add17123ddf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletspeed: 0
+  rb: {fileID: 0}
   dir: {x: 0, y: 0, z: 0}
+  whatIsEnemies:
+    serializedVersion: 2
+    m_Bits: 128
+  isExplosive: 0
+  explosion: {fileID: 0}
+  explosionDamage: 0
+  explosionRange: 0
+  explosionForce: 0
+  explodeOnTouch: 1
 --- !u!1 &5944240655050062002
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,6 +201,15 @@ MonoBehaviour:
   bulletspeed: 0
   rb: {fileID: 935368583}
   dir: {x: 0, y: 0, z: 0}
+  whatIsEnemies:
+    serializedVersion: 2
+    m_Bits: 2147483647
+  isExplosive: 0
+  explosion: {fileID: 279531126616779420, guid: 7e5e279575f1a7448b5765ac8a0c5a00,
+    type: 3}
+  explosionDamage: 0
+  explosionRange: 0
+  explosionForce: 0
   muzzleFlash: {fileID: 279531126616779420, guid: 6cfce6a33605e0f4eafd8adda7f2201c,
     type: 3}
-  KnockbackStrength: 0.5
+  KnockbackStrength: 2

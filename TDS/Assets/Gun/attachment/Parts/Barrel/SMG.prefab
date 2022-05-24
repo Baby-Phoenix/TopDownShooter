@@ -110,10 +110,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 063337e6e3e7447428bbf9c49310c80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage_M: 15
-  timeBetweenShooting_M: 0.1
-  spread_M: 0.15
-  range_M: 100
-  reloadTime_M: 2
-  timeBetweenShots_M: 0
-  bulletsPerTap_M: 1
+  damage_B: 3
+  timeBetweenShooting_B: 0.3
+  spread_B: 0.15
+  range_B: 100
+  reloadTime_B: 1
+  timeBetweenShots_B: 0
+  bulletsPerTap_B: 1
+  IsShotgun: 0

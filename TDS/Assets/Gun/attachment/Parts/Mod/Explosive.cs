@@ -15,24 +15,10 @@ public class Explosive : Mod
         explosionDamage = 10;
         explosionRange = 0.5f;
         explosionForce = 10;
-        if (gun.GetComponent<Gun>().IsRayCast == false)
-        {
-            gun.GetComponent<Gun>().bulletPrefab.GetComponent<PrefabBullet>().isExplosive = true;
-            gun.GetComponent<Gun>().bulletPrefab.GetComponent<PrefabBullet>().explosion = explosion;
-            gun.GetComponent<Gun>().bulletPrefab.GetComponent<PrefabBullet>().explosionDamage = explosionDamage;
-            gun.GetComponent<Gun>().bulletPrefab.GetComponent<PrefabBullet>().explosionRange = explosionRange;
-            gun.GetComponent<Gun>().bulletPrefab.GetComponent<PrefabBullet>().explosionForce = explosionForce;
-        }
+
     }
     public override void undoMod(GameObject gun)
     {
-        if (gun.GetComponent<Gun>().IsRayCast == false)
-        {
-            gun.GetComponent<Gun>().bulletPrefab.GetComponent<PrefabBullet>().isExplosive = false;
-            gun.GetComponent<Gun>().bulletPrefab.GetComponent<PrefabBullet>().explosion = null;
-            gun.GetComponent<Gun>().bulletPrefab.GetComponent<PrefabBullet>().explosionDamage = 0;
-            gun.GetComponent<Gun>().bulletPrefab.GetComponent<PrefabBullet>().explosionRange = 0;
-            gun.GetComponent<Gun>().bulletPrefab.GetComponent<PrefabBullet>().explosionForce = 0;
-        }
+
     }
 }

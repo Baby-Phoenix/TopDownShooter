@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class Gun : MonoBehaviour
+public class Gun_old : MonoBehaviour
 {
     //Gun stats
     public float damage;
@@ -119,7 +119,7 @@ public class Gun : MonoBehaviour
         }
         else
         {
-            shooting = Input.GetKeyDown(KeyCode.Mouse0);
+            shooting = Input.GetKeyDown (KeyCode.Mouse0);
         }
 
         //Shoot

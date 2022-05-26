@@ -1,64 +1,152 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class Gun : MonoBehaviour
+using TMPro;
+[CreateAssetMenu(fileName = "New Gun", menuName = "Gun/Gun")]
+public class Gun : ScriptableObject
 {
-    public float damage = 10f;
-    public float range = 100f;
-    public float fireRate = 15f;
-    public Transform firePoint;
+    public new string name;
+    public BarrelAttachment barrel;
+    public ChamberAttachment chamber;
+    public ScopeAttachment scope;
+    public MagazineAttachment magazine;
+    public StockAttachment stock;
+    public Mod mod;
 
-    public LineRenderer lineRenderer;
+    private GameObject bulletPrefab;
 
-    public ParticleSystem muzzleFlash;
-    public GameObject impactEffect;
-    public float impactForce = 45;
+    private float damage;
+    private float fireRate, spread, range, reloadTime, timeBetweenShoots, knockbackStrength, bulletSpeed;
+    private int magazineSize, bulletsPerTap;
+    private bool allowButtonHold;
+    private int bulletsLeft, bulletsShot;
 
-    private float nextTimeToFire = 0f;
+    private bool isRaycast,isShotgun, isHandloaded, canPenetrate;
 
-    // Update is called once per frame
-    void Update()
+    public void GunUpdate()
     {
-        if(Input.GetKey(KeyCode.Mouse0)&&Time.time>=nextTimeToFire)
+        float baseDamage;
+        float baseFireRate;
+        float baseSpread;
+        float baseRange;
+        float baseReloadTime;
+        float baseTimeBetweenShots;
+        float baseKnockbackStrength;
+        float baseBulletSpeed;
+        int baseBulletsPerTap;
+        int baseMagazineSize;
+        //barial
+        baseDamage = barrel.baseDamage;
+        baseFireRate = barrel.baseFireRate;
+        baseSpread = barrel.baseSpread;
+        baseRange = barrel.baseRange;
+        baseReloadTime = barrel.baseReloadTime;
+        baseTimeBetweenShots = barrel.baseTimeBetweenShoots;
+        baseBulletsPerTap = barrel.baseBulletsPerTap;
+        baseKnockbackStrength = barrel.baseKnockbackStrength;
+
+        isShotgun = barrel.isShotgun;
+
+        //Chamber
+        allowButtonHold = chamber.allowButtonHold;
+        isHandloaded = chamber.isHandLoaded;
+
+        //Magazine
+
+        isRaycast = magazine.isRaycast;
+        canPenetrate = magazine.canPenetrate;
+
+        baseMagazineSize = magazine.baseMagazineSize;
+
+        //Add all the Modifier
+        damage = baseDamage + chamber.DamageModifier(baseDamage) + magazine.DamageModifier(baseDamage);
+        fireRate = baseFireRate - chamber.FireRateModifier(baseFireRate);
+        spread = baseSpread - scope.SpreadModifier(baseSpread) - stock.SpreadModifier(baseSpread);
+        range = baseRange + scope.RangeModifier(baseRange);
+        reloadTime = baseReloadTime;
+        timeBetweenShoots = baseTimeBetweenShots;
+        knockbackStrength = baseKnockbackStrength + magazine.KnockbackStrengthModifier(baseKnockbackStrength);
+        bulletsPerTap = baseBulletsPerTap;
+        magazineSize = baseMagazineSize;
+
+        //For Prefab Bullet
+        if (magazine.bulletPrefab != null)
         {
-            nextTimeToFire = Time.time + 1f / fireRate;
-            StartCoroutine (Shoot());
+            bulletPrefab = magazine.bulletPrefab;
+            baseBulletSpeed = magazine.bulletSpeed;
+            bulletSpeed = baseBulletSpeed;
         }
     }
-    IEnumerator Shoot()
+
+    public GameObject getBulletPrefab()
     {
-        muzzleFlash.Play();
-        RaycastHit hit;
-        if(Physics.Raycast(firePoint.position, firePoint.forward, out hit, range)){
-            Debug.Log(hit.transform.name);
+        return bulletPrefab;
+    }
 
-            Target target = hit.transform.GetComponent<Target>();
-            if(target != null)
-            {
-                target.TakeDamage(damage);
-            }
+    public float getDamege()
+    {
+        return damage;
+    }
+    public float getFireRate()
+    {
+        return fireRate;
+    }
+    public float getRange()
+    {
+        return range;
+    }
+    public float getReloadTime()
+    {
+        return reloadTime;
+    }
+    public float getTimeBetweenShoots()
+    {
+        return timeBetweenShoots;
+    }
+    public float getSpread()
+    {
+        return spread;
+    }
 
-            if(hit.rigidbody != null)
-            {
-                hit.rigidbody.AddForce(-hit.normal * impactForce);
-            }
+    public float getKnockbackStrength()
+    {
+        return knockbackStrength;
+    }
 
-            Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+    public float getBulletSpeed()
+    {
+        return bulletSpeed;
+    }
 
-            lineRenderer.SetPosition(0, firePoint.position);
-            lineRenderer.SetPosition(1, hit.point);
-        }
-        else
-        {
-            lineRenderer.SetPosition(0, firePoint.position);
-            lineRenderer.SetPosition(1,firePoint.position+firePoint.forward*100);
-        }
-        lineRenderer.enabled = true;
-        //wait 1 frame
+    public int getMagazineSize()
+    {
+        return magazineSize;
+    }
+    public int getBulletsPerTap()
+    {
+        return bulletsPerTap;
+    }
 
-        yield return new WaitForSeconds(0.02f);
+    public bool getIsShotgun()
+    {
+        return isShotgun;
+    }
+    public bool getIsRaycast()
+    {
+        return isRaycast;
+    }
+    public bool getAllowButtonHold()
+    {
+        return allowButtonHold;
+    }
 
-        lineRenderer.enabled = false;
+    public bool getIsHandLoaded()
+    {
+        return isHandloaded;
+    }
+
+    public bool getCanPenetrate()
+    {
+        return canPenetrate;
     }
 }

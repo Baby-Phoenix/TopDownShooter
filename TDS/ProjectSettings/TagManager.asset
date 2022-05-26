@@ -8,17 +8,20 @@ TagManager:
   - Side
   - TopCam
   - SideCam
+  - Enemy
+  - Bullet
+  - Wall
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Top
+  - Ground
   - Water
   - UI
-  - Side
-  - 
-  - 
-  - 
+  - HitBox
+  - Enemy
+  - Bullet
+  - Player
   - 
   - 
   - 

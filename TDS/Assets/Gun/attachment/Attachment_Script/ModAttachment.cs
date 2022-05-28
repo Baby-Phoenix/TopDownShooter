@@ -27,7 +27,7 @@ public class ModAttachment : ScriptableObject
     public Effect effect2;
     public Effect effect3;
 
-    public static GameObject explosion;
+    public GameObject explosion;
     private Vector3 position;
 
 
@@ -41,25 +41,40 @@ public class ModAttachment : ScriptableObject
         //Firearm.OnBulletHitEnemy -= ModEffect1;
     }
 
-    public virtual void ModEffect1(){
-        if (effectType1 != EffectType.NoEffect)
+    public virtual void ModEffect1(Vector3 pos){
+        if (effectType1 != EffectType.NoEffect) // if there is a effect on the mod
         {
-            if (effectType1 == EffectType.EffectOnBulletHitEnemy)
+            if (effectType1 == EffectType.EffectOnBulletHitEnemy) // if the effect type is to appear when collided with the enemy
             {
                 switch (effect1) {
                     case Effect.Explosive:
-                        OnBulletHitEnemy += Explosive;
+                        OnBulletHitEnemy += Explosive; //the explosion fuction is added to the OnbulletHitenemy fuction which call does the explosion
                         break;
                 }
+                OnBulletHitEnemy(pos);
             }
-            else if (effectType1 == EffectType.EffectOnBulletHit)
+            else if (effectType1 == EffectType.EffectOnBulletHit)// if the effect type is to appear when collided with anything
             {
+                switch (effect1)
+                {
+                    case Effect.Explosive:
+                        OnBulletHit += Explosive; //the explosion fuction is added to the OnBulletHit fuction which call does the explosion
+                        break;
+                }
 
-            }else if(effectType1 == EffectType.EffectOnFiring)
-            {
-
+                OnBulletHit(pos);
             }
-            else
+            else if(effectType1 == EffectType.EffectOnFiring)// if the effect type is to appear when the bullet is fired
+            {
+                switch (effect1)
+                {
+                    case Effect.Explosive:
+                        OnFiring += Explosive; //the explosion fuction is added to the OnFiring fuction which call does the explosion
+                        break;
+                }
+                OnFiring(pos);
+            }
+            else //Enchant
             {
 
             }
@@ -73,8 +88,9 @@ public class ModAttachment : ScriptableObject
     }
 
 
-    public static void Explosive(Vector3 pos)
+    public void Explosive(Vector3 pos)
     {
+        Debug.Log(pos);
         Instantiate(explosion, pos, Quaternion.identity);
         Collider[] enemies = Physics.OverlapSphere(pos, 5);
         for (int i = 0; i < enemies.Length; i++)

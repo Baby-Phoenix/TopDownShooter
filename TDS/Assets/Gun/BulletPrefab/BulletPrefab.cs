@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BulletPrefab : MonoBehaviour
 {
+    public ModAttachment mod;
     protected float knockbackStrength;
     protected float damage;
 

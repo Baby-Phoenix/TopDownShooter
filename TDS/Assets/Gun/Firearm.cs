@@ -165,6 +165,7 @@ public class Firearm : MonoBehaviour
             Target target = rayHit.transform.GetComponent<Target>();
             if (rayHit.collider.CompareTag("Enemy"))
             {
+                gun.mod.ModEffect1(target.transform.position);
                 Rigidbody rb = rayHit.transform.gameObject.GetComponent<Rigidbody>();
                 direction.y = 0;
                 rb.AddForce(direction.normalized * gun.getKnockbackStrength(), ForceMode.Impulse);
@@ -197,6 +198,7 @@ public class Firearm : MonoBehaviour
                 hit = hits[i];
                 if (hit.collider.CompareTag("Enemy"))
                 {
+                    gun.mod.ModEffect1(hit.transform.position);
                     target = hit.transform.GetComponent<Target>();
 
                     rb = hit.transform.gameObject.GetComponent<Rigidbody>();
@@ -226,6 +228,8 @@ public class Firearm : MonoBehaviour
         bullet.GetComponent<BulletPrefab>().setKnockbackStrength(gun.getKnockbackStrength());
         bullet.GetComponent<BulletPrefab>().setKnockbackDirection(direction);
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
+
+        bullet.GetComponent<BulletPrefab>().mod = gun.mod;
 
         rb.AddForce(direction * gun.getBulletSpeed(), ForceMode.Impulse);
     }

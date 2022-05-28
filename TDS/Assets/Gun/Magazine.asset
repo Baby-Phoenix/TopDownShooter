@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 0}
   isRaycast: 1
-  canPenetrate: 0
+  canPenetrate: 1
   baseMagazineSize: 30
   knockbackStrengthModifer: 0.3
   damageModifer: 0

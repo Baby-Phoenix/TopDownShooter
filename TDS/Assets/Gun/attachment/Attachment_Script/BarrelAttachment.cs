@@ -12,6 +12,12 @@ public class BarrelAttachment : ScriptableObject
     public float baseReloadTime;
     public float baseTimeBetweenShoots;
     public float baseKnockbackStrength;
+    public float bulletSpeedModifer;
     public int   baseBulletsPerTap;
     public bool  isShotgun;
+
+    public virtual float BulletSpeedModifer(float bulletSpeed)
+    {
+        return bulletSpeed * bulletSpeedModifer;
+    }
 }

@@ -119,7 +119,7 @@ public class Gun_old : MonoBehaviour
         }
         else
         {
-            shooting = Input.GetKeyDown (KeyCode.Mouse0);
+            shooting = Input.GetKeyDown(KeyCode.Mouse0);
         }
 
         //Shoot
@@ -217,7 +217,7 @@ public class Gun_old : MonoBehaviour
         {
             GameObject bullet = Instantiate(bulletPrefab, attackPoint.position, attackPoint.rotation);
             Rigidbody rb = bullet.GetComponent<Rigidbody>();
-            bullet.GetComponent<PrefabBullet>().setShootDirection(direction);
+            //bullet.GetComponent<PrefabBullet>().setShootDirection(direction);
             rb.AddForce(direction * bulletspeed, ForceMode.Impulse);
         }
         if (!IsShotgun)

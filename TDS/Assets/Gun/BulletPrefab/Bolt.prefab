@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7411168348052368774}
   - component: {fileID: 5490338467526424098}
-  - component: {fileID: 1457108932}
+  - component: {fileID: 1220146282}
   m_Layer: 8
-  m_Name: HitBox
+  m_Name: KnockbackHitBox
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,7 +46,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1457108932
+--- !u!114 &1220146282
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -55,21 +55,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5664856291590024282}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f722adddb9c5d4b419f15add17123ddf, type: 3}
+  m_Script: {fileID: 11500000, guid: 701a284bc23bfdd4f813ef7bcc8fe599, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletspeed: 0
-  rb: {fileID: 0}
-  dir: {x: 0, y: 0, z: 0}
-  whatIsEnemies:
-    serializedVersion: 2
-    m_Bits: 128
-  isExplosive: 0
-  explosion: {fileID: 0}
-  explosionDamage: 0
-  explosionRange: 0
-  explosionForce: 0
-  explodeOnTouch: 1
+  muzzleFlash: {fileID: 279531126616779420, guid: 6cfce6a33605e0f4eafd8adda7f2201c,
+    type: 3}
 --- !u!1 &5944240655050062002
 GameObject:
   m_ObjectHideFlags: 0
@@ -83,7 +73,7 @@ GameObject:
   - component: {fileID: 2895875213549411434}
   - component: {fileID: 4199153004817532263}
   - component: {fileID: 935368583}
-  - component: {fileID: -5309402758311935675}
+  - component: {fileID: -8191325587567714111}
   m_Layer: 6
   m_Name: Bolt
   m_TagString: Bullet
@@ -186,7 +176,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 1
---- !u!114 &-5309402758311935675
+--- !u!114 &-8191325587567714111
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -195,21 +185,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 5944240655050062002}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5b88fd26ffb3994e94770326a53f708, type: 3}
+  m_Script: {fileID: 11500000, guid: 5bf88703dad79984c964e5eeacf01d64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletspeed: 0
-  rb: {fileID: 935368583}
-  dir: {x: 0, y: 0, z: 0}
-  whatIsEnemies:
-    serializedVersion: 2
-    m_Bits: 2147483647
-  isExplosive: 0
-  explosion: {fileID: 279531126616779420, guid: 7e5e279575f1a7448b5765ac8a0c5a00,
-    type: 3}
-  explosionDamage: 0
-  explosionRange: 0
-  explosionForce: 0
   muzzleFlash: {fileID: 279531126616779420, guid: 6cfce6a33605e0f4eafd8adda7f2201c,
     type: 3}
-  KnockbackStrength: 2

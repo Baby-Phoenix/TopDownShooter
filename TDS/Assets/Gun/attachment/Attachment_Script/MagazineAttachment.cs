@@ -15,7 +15,7 @@ public class MagazineAttachment : ScriptableObject
     public float knockbackStrengthModifer;// This should be a percentage betwen 0-1
     public float damageModifer;// This should be a percentage betwen 0-1
 
-    public float bulletSpeed;// For Prefab Bullet 
+    public float baseBulletSpeed;// For Prefab Bullet 
 
     public virtual float DamageModifier(float baseDamage)
     {

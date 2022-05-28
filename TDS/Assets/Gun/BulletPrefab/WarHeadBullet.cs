@@ -2,34 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarHeadBullet : PrefabBullet
+public class WarheadBullet : BulletPrefab
 {
-    public GameObject muzzleFlash;
-    public bool explodeOnTouch = true;
-
-
+    private void OnEnable()
+    {
+        Firearm.OnBulletHitEnemy += ModAttachment.Explosive;
+    }
+    private void OnDisable()
+    {
+        Firearm.OnBulletHitEnemy -= ModAttachment.Explosive;
+    }
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag =="Wall"|| collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "Wall" || collision.gameObject.tag == "Enemy")
         {
-            if(explodeOnTouch == true && isExplosive == true)
-            {
-                Explode();
-            }
-
             GameObject effect = Instantiate(muzzleFlash, transform.position, Quaternion.identity);
+            Rigidbody rb = collision.gameObject.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.AddForce(knockbackDirection.normalized * knockbackStrength, ForceMode.Impulse);
+            }
             Destroy(effect, 5);
             Destroy(gameObject);
         }
     }
-
-
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, explosionRange);
-    }
-
-
 }

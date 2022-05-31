@@ -21,6 +21,9 @@ public class WarheadBullet : BulletPrefab
             Destroy(gameObject);
         }
     }
-    
-    //Mod
+
+    private void Update()
+    {
+        EffectWhileBulletFlying();
+    }
 }

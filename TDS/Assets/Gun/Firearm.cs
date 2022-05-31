@@ -125,7 +125,6 @@ public class Firearm : MonoBehaviour
 
         if (allowInvoke)
         {
-            Debug.Log(gun.getFireRate());
             Invoke("ResetShot", gun.getFireRate());
             allowInvoke = false;
         }
@@ -248,13 +247,13 @@ public class Firearm : MonoBehaviour
                 hit = hits[i];
                 if (hit.collider.CompareTag("Enemy"))
                 {
-                    EffectOnHit(hit.point);
                     target = hit.transform.GetComponent<Target>();
                     rb = hit.transform.gameObject.GetComponent<Rigidbody>();
                     direction.y = 0;
                     rb.AddForce(direction.normalized * gun.getKnockbackStrength(), ForceMode.Impulse);
                     target.TakeDamage(gun.getDamege());
                 }
+                EffectOnHit(hit.point);
                 //Graphics
                 Instantiate(HitEffect, hit.point, Quaternion.Euler(0, 180, 0));
                 Instantiate(muzzleFlash, shootingPoint.position, Quaternion.identity);
@@ -282,23 +281,26 @@ public class Firearm : MonoBehaviour
         {
             if (IsShootingFromLeft)
             {
-                Debug.Log("Left");
+                //Debug.Log("Left");
                 shootingPoint = attackPointLeft;
             }
             else
             {
-                Debug.Log("Right");
+                //Debug.Log("Right");
                 shootingPoint = attackPointRight;
             }
         }
-
 
         //set damage and knockback strength before Instantiate bullet
         GameObject bullet = Instantiate(gun.getBulletPrefab(), shootingPoint.position, shootingPoint.rotation);
         bullet.GetComponent<BulletPrefab>().setDamage(gun.getDamege());
         bullet.GetComponent<BulletPrefab>().setKnockbackStrength(gun.getKnockbackStrength());
-        bullet.GetComponent<BulletPrefab>().setKnockbackDirection(direction=new Vector3(direction.x,0, direction.z));
+        bullet.GetComponent<BulletPrefab>().setKnockbackDirection(new Vector3(direction.x,0, direction.z));
         bullet.GetComponent<BulletPrefab>().setModFunction1(gun.mod.GetEffect1());
+        bullet.GetComponent<BulletPrefab>().setModFunction2(gun.mod.GetEffect2());
+        bullet.GetComponent<BulletPrefab>().setModFunction3(gun.mod.GetEffect3());
+        bullet.GetComponent<BulletPrefab>().setBulletSpeed(gun.getBulletSpeed());
+        bullet.GetComponent<BulletPrefab>().setFirePosition(gameObject.transform.position);
         bullet.GetComponent<Rigidbody>().velocity = direction * gun.getBulletSpeed();
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
 

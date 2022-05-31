@@ -134,6 +134,8 @@ MonoBehaviour:
     type: 3}
   explosion: {fileID: 279531126616779420, guid: 7e5e279575f1a7448b5765ac8a0c5a00,
     type: 3}
-  WhatIsEnemy:
+  whatIsEnemy:
     serializedVersion: 2
     m_Bits: 128
+  screenPosition: {x: 0, y: 0, z: 0}
+  worldPosition: {x: 0, y: 0, z: 0}

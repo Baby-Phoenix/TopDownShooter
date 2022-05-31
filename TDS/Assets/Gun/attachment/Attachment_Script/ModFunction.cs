@@ -7,7 +7,7 @@ using UnityEngine;
 public class ModFunction : ScriptableObject
 {
     public enum EffectType { NoEffect = 0, EffectOnBulletHitEnemy = 1, EffectOnBulletHit = 2, EffectOnFiring = 3, Enchant = 4 };
-    public enum Effect { NoEffect = 0, Explosive = 1 , DualMode = 2};
+    public enum Effect { NoEffect = 0, Explosive = 1 , DualMode = 2, Homing =3};
 
 
     public EffectType effectType;

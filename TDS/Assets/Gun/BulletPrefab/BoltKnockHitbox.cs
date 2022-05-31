@@ -19,6 +19,7 @@ public class BoltKnockHitbox : BoltBullet
     {
         if (other.gameObject.tag == "Enemy")
         {
+            other.gameObject.GetComponent<Target>().TakeDamage(transform.parent.GetComponent<BoltBullet>().getDamage());
             f1 = transform.parent.GetComponent<BoltBullet>().f1;
             EffectOnHit();
         }

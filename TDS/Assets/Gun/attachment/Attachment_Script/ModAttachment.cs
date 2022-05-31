@@ -29,11 +29,12 @@ public class ModAttachment : ScriptableObject
     private float bulletSpeedModifier;
     private int magazineSizeModifier;
     private float knockbackStrengthModifier;
-
+    //For mode Function
+    private bool DualModeOn = false;
     public void setModAttachmentModifier()
     {
         damageModifier = (1+f1.damageModifier) * (1 + f2.damageModifier) * (1 + f3.damageModifier);
-        fireRateModifier = (1 + f1.fireRateModifier) * (1 + f2.fireRateModifier) * (1 + f3.fireRateModifier);
+        fireRateModifier = (1 - f1.fireRateModifier) * (1 - f2.fireRateModifier) * (1 - f3.fireRateModifier);
         spreadModifier = (1- f1.spreadModifier) * (1 - f2.spreadModifier) * (1 - f3.spreadModifier);
         rangeModifier = (1+f1.rangeModifier) *  (1 + f2.rangeModifier) * (1 + f3.rangeModifier);
         reloadTimeModifier = (1 - f1.reloadTimeModifier) * (1 - f2.reloadTimeModifier) * (1 - f3.reloadTimeModifier);
@@ -50,6 +51,15 @@ public class ModAttachment : ScriptableObject
         effect1 = f1.effect;
         effect2 = f2.effect;
         effect3 = f3.effect;
+
+        if (f1.effect== ModFunction.Effect.DualMode|| f2.effect == ModFunction.Effect.DualMode|| f3.effect == ModFunction.Effect.DualMode)
+        {
+            DualModeOn = true;
+        }
+        else
+        {
+            DualModeOn = false;
+        }
     }
 
     public virtual float DamageModifier(float baseDamage)
@@ -113,5 +123,10 @@ public class ModAttachment : ScriptableObject
     public ModFunction.Effect GetEffect3()
     {
         return effect3;
+    }
+
+    public bool GetDualMode()
+    {
+        return DualModeOn;
     }
 }

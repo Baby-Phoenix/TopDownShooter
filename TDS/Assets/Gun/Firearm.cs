@@ -11,10 +11,16 @@ public class Firearm : MonoBehaviour
     //bools
     bool shooting, readyToShoot, reloading;
     bool allowInvoke = true;
-
+    //For Dual Mode
+    bool dualMode = false;
+    bool IsShootingFromLeft = true;
     //Reference
     public Gun gun;
     public Transform attackPoint;
+
+    public Transform attackPointLeft;
+    public Transform attackPointRight;
+
     public RaycastHit rayHit;
     public LayerMask whatIsEnemy;
 
@@ -22,25 +28,19 @@ public class Firearm : MonoBehaviour
     public GameObject muzzleFlash, HitEffect;
     public TextMeshProUGUI text;
     public GameObject explosion;
-    //For modAttachment
-    public delegate void OnBulletHitEnemyModEffect(Vector3 pos);
-    public static event OnBulletHitEnemyModEffect OnBulletHitEnemy;
-
-    public delegate void OnBulletHitModEffect(Vector3 pos);
-    public static event OnBulletHitModEffect OnBulletHit;
-
-    public delegate void OnFiringModEffect(Vector3 pos);
-    public static event OnFiringModEffect OnFiring;
 
     private void Awake()
     {
         gun.GunUpdate();
+        ConstantEffect();
         bulletsLeft = gun.getMagazineSize();
         readyToShoot = true;
     }
 
     private void Update()
     {
+        gun.GunUpdate();
+        ConstantEffect();
         PlayerInput();
         text.SetText(bulletsLeft + " / " + gun.getMagazineSize());
     }
@@ -82,10 +82,23 @@ public class Firearm : MonoBehaviour
         float x = Random.Range(-gun.getSpread(), gun.getSpread());
         float y = Random.Range(-gun.getSpread(), gun.getSpread());
         float z = Random.Range(-gun.getSpread(), gun.getSpread());
-        Debug.Log(gun.getSpread());
+        Vector3 direction;
         //Calculate Direction with the spread
-        Vector3 direction = attackPoint.forward + new Vector3(x, y, z); ;
-
+        if (!dualMode)
+        {
+            direction = attackPoint.forward + new Vector3(x, y, z); ;
+        }
+        else
+        {
+            if (IsShootingFromLeft)
+            {
+                direction = attackPointLeft.forward + new Vector3(x, y, z);
+            }
+            else
+            {
+                direction = attackPointRight.forward + new Vector3(x, y, z);
+            }
+        }
         if (gun.getIsRaycast())
         {
             //cheack if the Raycast Bullet can penetrate enemy
@@ -106,11 +119,13 @@ public class Firearm : MonoBehaviour
         if (!gun.getIsShotgun())
         {
             bulletsLeft--;
+            IsShootingFromLeft = !IsShootingFromLeft;
         }
         bulletsShot--;
 
         if (allowInvoke)
         {
+            Debug.Log(gun.getFireRate());
             Invoke("ResetShot", gun.getFireRate());
             allowInvoke = false;
         }
@@ -121,6 +136,7 @@ public class Firearm : MonoBehaviour
         if (bulletsShot <= 0 && gun.getIsShotgun())
         {
             bulletsLeft--;
+            IsShootingFromLeft = !IsShootingFromLeft;
         }
 
     }
@@ -156,7 +172,25 @@ public class Firearm : MonoBehaviour
     //Fire fuction for 4 type of bullet
     //Raycast Bullet
     private void RaycastFire(Vector3 direction) {
-        if (Physics.Raycast(attackPoint.position, direction, out rayHit, gun.getRange(), whatIsEnemy))
+        Transform shootingPoint;
+
+        if (!dualMode)
+        {
+            shootingPoint = attackPoint;
+        }
+        else
+        {
+            if (IsShootingFromLeft)
+            {
+                shootingPoint = attackPointLeft;
+            }
+            else
+            {
+                shootingPoint = attackPointRight;
+            }
+        }
+
+        if (Physics.Raycast(shootingPoint.position, direction, out rayHit, gun.getRange(), whatIsEnemy))
         {
             Target target = rayHit.transform.GetComponent<Target>();
             if (rayHit.collider.CompareTag("Enemy"))
@@ -169,14 +203,14 @@ public class Firearm : MonoBehaviour
             }
             //GFX
             Instantiate(HitEffect, rayHit.point, Quaternion.Euler(0, 180, 0));
-            Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
+            Instantiate(muzzleFlash, shootingPoint.position, Quaternion.identity);
         }
         else
         {
-            EffectOnHit(attackPoint.forward * 100);
+            EffectOnHit(shootingPoint.forward * 100);
             //Graphics
-            Instantiate(HitEffect, attackPoint.forward * 100, Quaternion.Euler(0, 180, 0));
-            Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
+            Instantiate(HitEffect, shootingPoint.forward * 100, Quaternion.Euler(0, 180, 0));
+            Instantiate(muzzleFlash, shootingPoint.position, Quaternion.identity);
         }
     }
 
@@ -187,7 +221,26 @@ public class Firearm : MonoBehaviour
         RaycastHit[] hits;
         Target target;
         Rigidbody rb;
-        hits = Physics.RaycastAll(attackPoint.position, direction, gun.getRange(), whatIsEnemy);
+
+        Transform shootingPoint;
+
+        if (!dualMode)
+        {
+            shootingPoint = attackPoint;
+        }
+        else
+        {
+            if (IsShootingFromLeft)
+            {
+                shootingPoint = attackPointLeft;
+            }
+            else
+            {
+                shootingPoint = attackPointRight;
+            }
+        }
+
+        hits = Physics.RaycastAll(shootingPoint.position, direction, gun.getRange(), whatIsEnemy);
         if (hits != null)
         {
             for (int i = 0; i < hits.Length; i++)
@@ -204,23 +257,44 @@ public class Firearm : MonoBehaviour
                 }
                 //Graphics
                 Instantiate(HitEffect, hit.point, Quaternion.Euler(0, 180, 0));
-                Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
+                Instantiate(muzzleFlash, shootingPoint.position, Quaternion.identity);
             }
         }
         else
         {
-            EffectOnHit(attackPoint.forward * 100);
+            EffectOnHit(shootingPoint.forward * 100);
             //Graphics
-            Instantiate(HitEffect, attackPoint.forward * 100, Quaternion.Euler(0, 180, 0));
-            Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
+            Instantiate(HitEffect, shootingPoint.forward * 100, Quaternion.Euler(0, 180, 0));
+            Instantiate(muzzleFlash, shootingPoint.position, Quaternion.identity);
         }
     }
 
     //Prefab Bullet
     private void PrefabBulletFire(Vector3 direction)
     {
+        Transform shootingPoint;
+
+        if (!dualMode)
+        {
+            shootingPoint = attackPoint;
+        }
+        else
+        {
+            if (IsShootingFromLeft)
+            {
+                Debug.Log("Left");
+                shootingPoint = attackPointLeft;
+            }
+            else
+            {
+                Debug.Log("Right");
+                shootingPoint = attackPointRight;
+            }
+        }
+
+
         //set damage and knockback strength before Instantiate bullet
-        GameObject bullet = Instantiate(gun.getBulletPrefab(), attackPoint.position, attackPoint.rotation);
+        GameObject bullet = Instantiate(gun.getBulletPrefab(), shootingPoint.position, shootingPoint.rotation);
         bullet.GetComponent<BulletPrefab>().setDamage(gun.getDamege());
         bullet.GetComponent<BulletPrefab>().setKnockbackStrength(gun.getKnockbackStrength());
         bullet.GetComponent<BulletPrefab>().setKnockbackDirection(direction=new Vector3(direction.x,0, direction.z));
@@ -249,5 +323,54 @@ public class Firearm : MonoBehaviour
                 }
                 break;
         }
+
+        switch (gun.mod.GetEffect2())
+        {
+            case ModFunction.Effect.Explosive:
+                if (explosion != null) Instantiate(explosion, hitPoint, Quaternion.identity);
+                Collider[] enemies = Physics.OverlapSphere(hitPoint, 5, whatIsEnemy);
+                for (int i = 0; i < enemies.Length; i++)
+                {
+                    if (enemies[i].GetComponent<Rigidbody>())
+                    {
+                        enemies[i].GetComponent<Rigidbody>().AddExplosionForce(70, hitPoint, 5);
+                    }
+                }
+                break;
+        }
+
+        switch (gun.mod.GetEffect3())
+        {
+            case ModFunction.Effect.Explosive:
+                if (explosion != null) Instantiate(explosion, hitPoint, Quaternion.identity);
+                Collider[] enemies = Physics.OverlapSphere(hitPoint, 5, whatIsEnemy);
+                for (int i = 0; i < enemies.Length; i++)
+                {
+                    if (enemies[i].GetComponent<Rigidbody>())
+                    {
+                        enemies[i].GetComponent<Rigidbody>().AddExplosionForce(70, hitPoint, 5);
+                    }
+                }
+                break;
+        }
+
+        switch (gun.mod.GetEffect3())
+        {
+            case ModFunction.Effect.Explosive:
+                if (explosion != null) Instantiate(explosion, hitPoint, Quaternion.identity);
+                Collider[] enemies = Physics.OverlapSphere(hitPoint, 5, whatIsEnemy);
+                for (int i = 0; i < enemies.Length; i++)
+                {
+                    if (enemies[i].GetComponent<Rigidbody>())
+                    {
+                        enemies[i].GetComponent<Rigidbody>().AddExplosionForce(70, hitPoint, 5);
+                    }
+                }
+                break;
+        }
+    }
+    protected virtual void ConstantEffect()
+    {
+        dualMode = gun.mod.GetDualMode();
     }
 }

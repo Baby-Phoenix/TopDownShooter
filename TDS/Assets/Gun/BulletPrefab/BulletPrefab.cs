@@ -17,6 +17,11 @@ public class BulletPrefab : MonoBehaviour
     public GameObject muzzleFlash;
     public GameObject explosion;
     public LayerMask whatIsEnemy;
+
+    protected void Awake()
+    {
+        Destroy(gameObject,5);
+    }
     public void setKnockbackStrength(float k)
     {
         knockbackStrength = k;

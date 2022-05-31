@@ -14,9 +14,10 @@ public class WarheadBullet : BulletPrefab
             Rigidbody rb = collision.gameObject.GetComponent<Rigidbody>();
             if (rb != null && collision.gameObject.tag == "Enemy") 
             {
+                collision.gameObject.GetComponent<Target>().TakeDamage(damage);
                 rb.AddForce(knockbackDirection.normalized * knockbackStrength, ForceMode.Impulse);
             }
-            Destroy(effect, 5);
+            Destroy(effect, 2);
             Destroy(gameObject);
         }
     }

@@ -18,6 +18,6 @@ public class BarrelAttachment : ScriptableObject
 
     public virtual float BulletSpeedModifer(float bulletSpeed)
     {
-        return bulletSpeed * bulletSpeedModifer;
+        return bulletSpeedModifer + 1;
     }
 }

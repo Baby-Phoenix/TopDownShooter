@@ -32,16 +32,16 @@ public class ModAttachment : ScriptableObject
 
     public void setModAttachmentModifier()
     {
-        damageModifier = f1.damageModifier + f2.damageModifier + f3.damageModifier;
-        fireRateModifier = f1.fireRateModifier + f2.fireRateModifier + f3.fireRateModifier;
-        spreadModifier = f1.spreadModifier + f2.spreadModifier + f3.spreadModifier;
-        rangeModifier = f1.rangeModifier + f2.rangeModifier + f3.rangeModifier;
-        reloadTimeModifier = f1.reloadTimeModifier + f2.reloadTimeModifier + f3.reloadTimeModifier;
-        timeBetweenShootsModifier = f1.timeBetweenShootsModifier + f2.timeBetweenShootsModifier + f3.timeBetweenShootsModifier;
-        bulletPerTapModifier = f1.bulletPerTapModifier + f2.bulletPerTapModifier + f3.bulletPerTapModifier;
-        bulletSpeedModifier = f1.bulletSpeedModifier + f2.bulletSpeedModifier + f3.bulletSpeedModifier;
-        magazineSizeModifier = f1.magazineSizeModifier + f2.magazineSizeModifier + f3.magazineSizeModifier;
-        knockbackStrengthModifier = f1.knockbackStrengthModifier + f2.knockbackStrengthModifier + f3.knockbackStrengthModifier;
+        damageModifier = (1+f1.damageModifier) * (1 + f2.damageModifier) * (1 + f3.damageModifier);
+        fireRateModifier = (1 + f1.fireRateModifier) * (1 + f2.fireRateModifier) * (1 + f3.fireRateModifier);
+        spreadModifier = (1- f1.spreadModifier) * (1 - f2.spreadModifier) * (1 - f3.spreadModifier);
+        rangeModifier = (1+f1.rangeModifier) *  (1 + f2.rangeModifier) * (1 + f3.rangeModifier);
+        reloadTimeModifier = (1 - f1.reloadTimeModifier) * (1 - f2.reloadTimeModifier) * (1 - f3.reloadTimeModifier);
+        timeBetweenShootsModifier = (1-f1.timeBetweenShootsModifier) * (1-f2.timeBetweenShootsModifier) + (1-f3.timeBetweenShootsModifier);
+        bulletPerTapModifier = (1+f1.bulletPerTapModifier) * (1+f2.bulletPerTapModifier) * (1+f3.bulletPerTapModifier);
+        bulletSpeedModifier = (1+f1.bulletSpeedModifier) * (1+f2.bulletSpeedModifier) * (1+f3.bulletSpeedModifier);
+        magazineSizeModifier = (1+f1.magazineSizeModifier) * (1+f2.magazineSizeModifier) * (1+f3.magazineSizeModifier);
+        knockbackStrengthModifier = (1 + f1.knockbackStrengthModifier) * (1 + f2.knockbackStrengthModifier) * (1 + f3.knockbackStrengthModifier);
 
         effectType1 = f1.effectType;
         effectType2 = f2.effectType;
@@ -54,39 +54,39 @@ public class ModAttachment : ScriptableObject
 
     public virtual float DamageModifier(float baseDamage)
     {
-        return baseDamage * damageModifier;
+        return damageModifier;
     }
     public virtual float FireRateModifier(float baseFireRate)
     {
-        return baseFireRate * fireRateModifier;
+        return fireRateModifier;
     }
     public virtual float SpreadModifier(float baseSpread)
     {
-        return baseSpread * spreadModifier;
+        return spreadModifier;
     }
     public virtual float RangeModifier(float baseRange)
     {
-        return baseRange * rangeModifier;
+        return rangeModifier;
     }
     public virtual float ReloadTimeModifier(float baseReloadTime)
     {
-        return baseReloadTime * reloadTimeModifier;
+        return reloadTimeModifier;
     }
     public virtual int BulletPerTapModifier(int baseBulletPerTap)
     {
-        return baseBulletPerTap * bulletPerTapModifier;
+        return bulletPerTapModifier;
     }
     public virtual float BulletSpeedModifier(float baseBulletSpeed)
     {
-        return baseBulletSpeed * bulletSpeedModifier;
+        return bulletSpeedModifier;
     }
     public virtual int MagazineSizeModifier(int baseMagazineSize)
     {
-        return baseMagazineSize * magazineSizeModifier;
+        return magazineSizeModifier;
     }
     public virtual float KnockbackStrengthModifier(float baseKnockbackStrength)
     {
-        return baseKnockbackStrength * knockbackStrengthModifier;
+        return knockbackStrengthModifier;
     }
 
     public ModFunction.EffectType GetEffectType1()

@@ -49,7 +49,6 @@ public class Firearm : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < gun.getMagazineSize() && !reloading)
         {
-            Debug.Log(gun.getReloadTime());
             Reload();
         }
         //full-Auto or Semi-Auto
@@ -83,7 +82,7 @@ public class Firearm : MonoBehaviour
         float x = Random.Range(-gun.getSpread(), gun.getSpread());
         float y = Random.Range(-gun.getSpread(), gun.getSpread());
         float z = Random.Range(-gun.getSpread(), gun.getSpread());
-
+        Debug.Log(gun.getSpread());
         //Calculate Direction with the spread
         Vector3 direction = attackPoint.forward + new Vector3(x, y, z); ;
 
@@ -225,7 +224,6 @@ public class Firearm : MonoBehaviour
         bullet.GetComponent<BulletPrefab>().setDamage(gun.getDamege());
         bullet.GetComponent<BulletPrefab>().setKnockbackStrength(gun.getKnockbackStrength());
         bullet.GetComponent<BulletPrefab>().setKnockbackDirection(direction=new Vector3(direction.x,0, direction.z));
-        Debug.Log(gun.mod.GetEffect1());
         bullet.GetComponent<BulletPrefab>().setModFunction1(gun.mod.GetEffect1());
         bullet.GetComponent<Rigidbody>().velocity = direction * gun.getBulletSpeed();
         Rigidbody rb = bullet.GetComponent<Rigidbody>();

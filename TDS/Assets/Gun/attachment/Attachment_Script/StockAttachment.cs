@@ -8,6 +8,6 @@ public class StockAttachment : ScriptableObject
     public float spreadModifier;// This should be a percentage betwen 0-1
 
     public virtual float SpreadModifier(float baseSpead) {
-        return spreadModifier * baseSpead;
+        return 1 - spreadModifier ;
     }
 }

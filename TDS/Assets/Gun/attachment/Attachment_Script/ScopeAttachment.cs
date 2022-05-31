@@ -9,9 +9,9 @@ public class ScopeAttachment : ScriptableObject
     public float rangeModifer;// This should be a percentage betwen 0-1
 
     public virtual float SpreadModifier(float baseSpead) {
-        return baseSpead * spreadModifer;
+        return 1 - spreadModifer;
     }
     public virtual float RangeModifier(float baseRange) {
-        return baseRange * rangeModifer;
+        return 1 + rangeModifer;
     }
 }

@@ -18,6 +18,7 @@ MonoBehaviour:
   baseRange: 100
   baseReloadTime: 1
   baseTimeBetweenShoots: 0
-  baseKnockbackStrength: 0.1
+  baseKnockbackStrength: 0.5
+  bulletSpeedModifer: 0
   baseBulletsPerTap: 1
   isShotgun: 0

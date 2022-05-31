@@ -4,14 +4,23 @@ using UnityEngine;
 
 public class BoltKnockHitbox : BoltBullet
 {
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "Enemy")
+        {
+            //mod.ModEffect1(new Vector3(0, 0, 0));
+            Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
+            rb.AddForce(transform.parent.GetComponent<BoltBullet>().getKnockbackDirection().normalized * transform.parent.GetComponent<BoltBullet>().getKnockbackStrength()/2, ForceMode.Impulse);
+            GameObject effect = Instantiate(muzzleFlash, transform.position, Quaternion.identity);
+            Destroy(effect, 5);
+        }
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Enemy")
         {
-            Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
-            rb.AddForce(transform.parent.GetComponent<BoltBullet>().getKnockbackDirection().normalized * transform.parent.GetComponent<BoltBullet>().getKnockbackStrength(), ForceMode.Impulse);
-            GameObject effect = Instantiate(muzzleFlash, transform.position, Quaternion.identity);
-            Destroy(effect, 5);
+            f1 = transform.parent.GetComponent<BoltBullet>().f1;
+            EffectOnHit();
         }
     }
 }

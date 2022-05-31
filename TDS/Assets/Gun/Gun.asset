@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Gun
   m_EditorClassIdentifier: 
   name: New Gun
-  barrel: {fileID: 11400000, guid: 992e9d1bc302b8b4eafa580762b63c8f, type: 2}
+  barrel: {fileID: 11400000, guid: 5738ba2dc712ea34780a6ead8519d55e, type: 2}
   chamber: {fileID: 11400000, guid: e18c821badbea9745adbfb72df778575, type: 2}
   scope: {fileID: 11400000, guid: 827472d2200ecfe43a745e4cb5fe8a4b, type: 2}
-  magazine: {fileID: 11400000, guid: cc3a73e7110e3044ba4d8c27c18b7842, type: 2}
+  magazine: {fileID: 11400000, guid: 18e2de8bb4739ab4fa173bb58797e994, type: 2}
   stock: {fileID: 11400000, guid: 056edb924698db645bc7d022da943456, type: 2}
-  mod: {fileID: 0}
+  mod: {fileID: 11400000, guid: 6bf7c886996594049a0a53cd1f59a317, type: 2}

@@ -10,6 +10,7 @@ public class ChamberAttachment : ScriptableObject
 
     public float damageModifer;
     public float fireRateModifer;// This should be a percentage betwen 0-1
+    public float reloadTimeModifer;
 
     public virtual float DamageModifier(float baseDamage)
     {
@@ -19,5 +20,10 @@ public class ChamberAttachment : ScriptableObject
     public virtual float FireRateModifier(float baseFiringSpeed)
     {
         return baseFiringSpeed * fireRateModifer;
+    }
+
+    public virtual float ReloadTimeModifier(float baseReloadTime)
+    {
+        return baseReloadTime * reloadTimeModifer;
     }
 }

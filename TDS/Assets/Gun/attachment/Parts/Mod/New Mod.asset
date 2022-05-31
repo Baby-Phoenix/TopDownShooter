@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a46f9b1ac90546843a14762b41bfe6df, type: 3}
   m_Name: New Mod
   m_EditorClassIdentifier: 
-  explosion: {fileID: 279531126616779420, guid: 7e5e279575f1a7448b5765ac8a0c5a00,
-    type: 3}
+  f1: {fileID: 11400000, guid: 5f7efc29d44eb384d91b65f22b1e105b, type: 2}
+  f2: {fileID: 11400000, guid: e4d00eeec5ba1464baeaa37c2049372d, type: 2}
+  f3: {fileID: 11400000, guid: e4d00eeec5ba1464baeaa37c2049372d, type: 2}

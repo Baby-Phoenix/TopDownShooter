@@ -8,7 +8,8 @@ public class BoltBullet : BulletPrefab
     {
         if (collision.gameObject.tag == "Wall")
         {
-            gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+            EffectOnHit();
+            gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0,0,0);
             GameObject effect = Instantiate(muzzleFlash, transform.position, Quaternion.identity);
             Destroy(effect, 5);
             Destroy(gameObject, 0.5f);
@@ -33,4 +34,5 @@ public class BoltBullet : BulletPrefab
     {
         return damage;
     }
+
 }

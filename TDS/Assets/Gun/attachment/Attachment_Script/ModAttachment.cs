@@ -6,101 +6,112 @@ using UnityEngine;
 
 public class ModAttachment : ScriptableObject
 {
+    public ModFunction f1;
+    public ModFunction f2;
+    public ModFunction f3;
 
-    //For modAttachment
-    public delegate void OnBulletHitEnemyModEffect(Vector3 pos);
-    public static event OnBulletHitEnemyModEffect OnBulletHitEnemy;
+    private ModFunction.EffectType effectType1;
+    private ModFunction.Effect effect1;
 
-    public delegate void OnBulletHitModEffect(Vector3 pos);
-    public static event OnBulletHitModEffect OnBulletHit;
+    private ModFunction.EffectType effectType2;
+    private ModFunction.Effect effect2;
 
-    public delegate void OnFiringModEffect(Vector3 pos);
-    public static event OnFiringModEffect OnFiring;
-    public enum EffectType { NoEffect = 0, EffectOnBulletHitEnemy = 1, EffectOnBulletHit = 2, EffectOnFiring = 3, Enchant = 4 };
-    public enum Effect { Explosive = 0 };
+    private ModFunction.EffectType effectType3;
+    private ModFunction.Effect effect3;
 
-    public EffectType effectType1;
-    public EffectType effectType2;
-    public EffectType effectType3;
+    private float damageModifier;
+    private float fireRateModifier;
+    private float spreadModifier;
+    private float rangeModifier;
+    private float reloadTimeModifier;
+    private float timeBetweenShootsModifier;
+    private int bulletPerTapModifier;
+    private float bulletSpeedModifier;
+    private int magazineSizeModifier;
+    private float knockbackStrengthModifier;
 
-    public Effect effect1;
-    public Effect effect2;
-    public Effect effect3;
-
-    public GameObject explosion;
-    private Vector3 position;
-
-
-    public void OnEnable()
+    public void setModAttachmentModifier()
     {
-        //Firearm.OnBulletHitEnemy += ModEffect1;
+        damageModifier = f1.damageModifier + f2.damageModifier + f3.damageModifier;
+        fireRateModifier = f1.fireRateModifier + f2.fireRateModifier + f3.fireRateModifier;
+        spreadModifier = f1.spreadModifier + f2.spreadModifier + f3.spreadModifier;
+        rangeModifier = f1.rangeModifier + f2.rangeModifier + f3.rangeModifier;
+        reloadTimeModifier = f1.reloadTimeModifier + f2.reloadTimeModifier + f3.reloadTimeModifier;
+        timeBetweenShootsModifier = f1.timeBetweenShootsModifier + f2.timeBetweenShootsModifier + f3.timeBetweenShootsModifier;
+        bulletPerTapModifier = f1.bulletPerTapModifier + f2.bulletPerTapModifier + f3.bulletPerTapModifier;
+        bulletSpeedModifier = f1.bulletSpeedModifier + f2.bulletSpeedModifier + f3.bulletSpeedModifier;
+        magazineSizeModifier = f1.magazineSizeModifier + f2.magazineSizeModifier + f3.magazineSizeModifier;
+        knockbackStrengthModifier = f1.knockbackStrengthModifier + f2.knockbackStrengthModifier + f3.knockbackStrengthModifier;
+
+        effectType1 = f1.effectType;
+        effectType2 = f2.effectType;
+        effectType3 = f3.effectType;
+
+        effect1 = f1.effect;
+        effect2 = f2.effect;
+        effect3 = f3.effect;
     }
-    public void OnDisable()
+
+    public virtual float DamageModifier(float baseDamage)
     {
-
-        //Firearm.OnBulletHitEnemy -= ModEffect1;
+        return baseDamage * damageModifier;
     }
-
-    public virtual void ModEffect1(Vector3 pos){
-        if (effectType1 != EffectType.NoEffect) // if there is a effect on the mod
-        {
-            if (effectType1 == EffectType.EffectOnBulletHitEnemy) // if the effect type is to appear when collided with the enemy
-            {
-                switch (effect1) {
-                    case Effect.Explosive:
-                        OnBulletHitEnemy += Explosive; //the explosion fuction is added to the OnbulletHitenemy fuction which call does the explosion
-                        break;
-                }
-                OnBulletHitEnemy(pos);
-            }
-            else if (effectType1 == EffectType.EffectOnBulletHit)// if the effect type is to appear when collided with anything
-            {
-                switch (effect1)
-                {
-                    case Effect.Explosive:
-                        OnBulletHit += Explosive; //the explosion fuction is added to the OnBulletHit fuction which call does the explosion
-                        break;
-                }
-
-                OnBulletHit(pos);
-            }
-            else if(effectType1 == EffectType.EffectOnFiring)// if the effect type is to appear when the bullet is fired
-            {
-                switch (effect1)
-                {
-                    case Effect.Explosive:
-                        OnFiring += Explosive; //the explosion fuction is added to the OnFiring fuction which call does the explosion
-                        break;
-                }
-                OnFiring(pos);
-            }
-            else //Enchant
-            {
-
-            }
-        }
-    }
-    public virtual void ModEffect2() { 
-    
-    }
-    public virtual void ModEffect3() {
-    
-    }
-
-
-    public void Explosive(Vector3 pos)
+    public virtual float FireRateModifier(float baseFireRate)
     {
-        Debug.Log(pos);
-        Instantiate(explosion, pos, Quaternion.identity);
-        Collider[] enemies = Physics.OverlapSphere(pos, 5);
-        for (int i = 0; i < enemies.Length; i++)
-        {
-            Debug.Log(enemies[i]);
-            if (enemies[i].GetComponent<Rigidbody>())
-            {
-                enemies[i].GetComponent<Rigidbody>().AddExplosionForce(100, pos, 5);
-            }
-        }
+        return baseFireRate * fireRateModifier;
+    }
+    public virtual float SpreadModifier(float baseSpread)
+    {
+        return baseSpread * spreadModifier;
+    }
+    public virtual float RangeModifier(float baseRange)
+    {
+        return baseRange * rangeModifier;
+    }
+    public virtual float ReloadTimeModifier(float baseReloadTime)
+    {
+        return baseReloadTime * reloadTimeModifier;
+    }
+    public virtual int BulletPerTapModifier(int baseBulletPerTap)
+    {
+        return baseBulletPerTap * bulletPerTapModifier;
+    }
+    public virtual float BulletSpeedModifier(float baseBulletSpeed)
+    {
+        return baseBulletSpeed * bulletSpeedModifier;
+    }
+    public virtual int MagazineSizeModifier(int baseMagazineSize)
+    {
+        return baseMagazineSize * magazineSizeModifier;
+    }
+    public virtual float KnockbackStrengthModifier(float baseKnockbackStrength)
+    {
+        return baseKnockbackStrength * knockbackStrengthModifier;
     }
 
+    public ModFunction.EffectType GetEffectType1()
+    {
+        return effectType1;
+    }
+    public ModFunction.EffectType GetEffectType2()
+    {
+        return effectType2;
+    }
+    public ModFunction.EffectType GetEffectType3()
+    {
+        return effectType3;
+    }
+
+    public ModFunction.Effect GetEffect1()
+    {
+        return effect1;
+    }
+    public ModFunction.Effect GetEffect2()
+    {
+        return effect2;
+    }
+    public ModFunction.Effect GetEffect3()
+    {
+        return effect3;
+    }
 }

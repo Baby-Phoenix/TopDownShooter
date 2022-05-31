@@ -21,7 +21,7 @@ public class Firearm : MonoBehaviour
     //Graphics
     public GameObject muzzleFlash, HitEffect;
     public TextMeshProUGUI text;
-
+    public GameObject explosion;
     //For modAttachment
     public delegate void OnBulletHitEnemyModEffect(Vector3 pos);
     public static event OnBulletHitEnemyModEffect OnBulletHitEnemy;
@@ -49,6 +49,7 @@ public class Firearm : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < gun.getMagazineSize() && !reloading)
         {
+            Debug.Log(gun.getReloadTime());
             Reload();
         }
         //full-Auto or Semi-Auto
@@ -158,14 +159,10 @@ public class Firearm : MonoBehaviour
     private void RaycastFire(Vector3 direction) {
         if (Physics.Raycast(attackPoint.position, direction, out rayHit, gun.getRange(), whatIsEnemy))
         {
-            /*if (OnBulletHitEnemy != null)
-            {
-                OnBulletHitEnemy(rayHit.point);
-            }*/
             Target target = rayHit.transform.GetComponent<Target>();
             if (rayHit.collider.CompareTag("Enemy"))
             {
-                gun.mod.ModEffect1(target.transform.position);
+                EffectOnHit(rayHit.transform.position);
                 Rigidbody rb = rayHit.transform.gameObject.GetComponent<Rigidbody>();
                 direction.y = 0;
                 rb.AddForce(direction.normalized * gun.getKnockbackStrength(), ForceMode.Impulse);
@@ -177,6 +174,7 @@ public class Firearm : MonoBehaviour
         }
         else
         {
+            EffectOnHit(attackPoint.forward * 100);
             //Graphics
             Instantiate(HitEffect, attackPoint.forward * 100, Quaternion.Euler(0, 180, 0));
             Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
@@ -198,9 +196,8 @@ public class Firearm : MonoBehaviour
                 hit = hits[i];
                 if (hit.collider.CompareTag("Enemy"))
                 {
-                    gun.mod.ModEffect1(hit.transform.position);
+                    EffectOnHit(hit.point);
                     target = hit.transform.GetComponent<Target>();
-
                     rb = hit.transform.gameObject.GetComponent<Rigidbody>();
                     direction.y = 0;
                     rb.AddForce(direction.normalized * gun.getKnockbackStrength(), ForceMode.Impulse);
@@ -213,6 +210,7 @@ public class Firearm : MonoBehaviour
         }
         else
         {
+            EffectOnHit(attackPoint.forward * 100);
             //Graphics
             Instantiate(HitEffect, attackPoint.forward * 100, Quaternion.Euler(0, 180, 0));
             Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
@@ -226,12 +224,32 @@ public class Firearm : MonoBehaviour
         GameObject bullet = Instantiate(gun.getBulletPrefab(), attackPoint.position, attackPoint.rotation);
         bullet.GetComponent<BulletPrefab>().setDamage(gun.getDamege());
         bullet.GetComponent<BulletPrefab>().setKnockbackStrength(gun.getKnockbackStrength());
-        bullet.GetComponent<BulletPrefab>().setKnockbackDirection(direction);
+        bullet.GetComponent<BulletPrefab>().setKnockbackDirection(direction=new Vector3(direction.x,0, direction.z));
+        Debug.Log(gun.mod.GetEffect1());
+        bullet.GetComponent<BulletPrefab>().setModFunction1(gun.mod.GetEffect1());
+        bullet.GetComponent<Rigidbody>().velocity = direction * gun.getBulletSpeed();
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
 
-        bullet.GetComponent<BulletPrefab>().mod = gun.mod;
-
-        rb.AddForce(direction * gun.getBulletSpeed(), ForceMode.Impulse);
     }
 
+
+
+    //Mod
+    protected virtual void EffectOnHit(Vector3 hitPoint)
+    {
+        switch (gun.mod.GetEffect1())
+        {
+            case ModFunction.Effect.Explosive:
+                if (explosion != null) Instantiate(explosion, hitPoint, Quaternion.identity);
+                Collider[] enemies = Physics.OverlapSphere(hitPoint, 5, whatIsEnemy);
+                for (int i = 0; i < enemies.Length; i++)
+                {
+                    if (enemies[i].GetComponent<Rigidbody>())
+                    {
+                        enemies[i].GetComponent<Rigidbody>().AddExplosionForce(70, hitPoint, 5);
+                    }
+                }
+                break;
+        }
+    }
 }

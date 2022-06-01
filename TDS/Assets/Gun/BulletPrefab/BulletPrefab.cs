@@ -27,7 +27,7 @@ public class BulletPrefab : MonoBehaviour
     public Vector3 worldPosition;
 
     protected Collider target;
-    protected void Awake()
+    protected virtual void Awake()
     {
         LockOn();
         Destroy(gameObject,5);

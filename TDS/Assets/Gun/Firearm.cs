@@ -14,6 +14,8 @@ public class Firearm : MonoBehaviour
     //For Dual Mode
     bool dualMode = false;
     bool IsShootingFromLeft = true;
+    //For Orbiter Mod
+    bool orbiterOn = false;
     //Reference
     public Gun gun;
     public Transform attackPoint;
@@ -24,6 +26,8 @@ public class Firearm : MonoBehaviour
     public RaycastHit rayHit;
     public LayerMask whatIsEnemy;
 
+    public GameObject orbiter;
+    GameObject OB;
     //Graphics
     public GameObject muzzleFlash, HitEffect;
     public TextMeshProUGUI text;
@@ -134,7 +138,10 @@ public class Firearm : MonoBehaviour
         }
         if (bulletsShot <= 0 && gun.getIsShotgun())
         {
-            bulletsLeft--;
+            if (bulletsLeft != 0)
+            {
+                bulletsLeft--;
+            }
             IsShootingFromLeft = !IsShootingFromLeft;
         }
 
@@ -306,7 +313,10 @@ public class Firearm : MonoBehaviour
 
     }
 
-
+    public int getAmmoLeft()
+    {
+        return bulletsLeft;
+    }
 
     //Mod
     protected virtual void EffectOnHit(Vector3 hitPoint)
@@ -374,5 +384,15 @@ public class Firearm : MonoBehaviour
     protected virtual void ConstantEffect()
     {
         dualMode = gun.mod.GetDualMode();
+        orbiterOn = gun.mod.GetOrbiterOn();
+        if (orbiterOn && OB == null)
+        {
+            OB = Instantiate(orbiter, transform.position, Quaternion.identity);
+            OB.GetComponent<Rotate>().setPlayer(gameObject);
+        }
+        else if(!orbiterOn && OB != null)
+        {
+            Destroy(OB.gameObject);
+        }
     }
 }

@@ -62,22 +62,22 @@ public class Gun : ScriptableObject
         baseMagazineSize = magazine.baseMagazineSize;
 
         //Add all the Modifier
-        damage = baseDamage * chamber.DamageModifier(baseDamage) * magazine.DamageModifier(baseDamage)* mod.DamageModifier(baseDamage);
-        fireRate = baseFireRate * chamber.FireRateModifier(baseFireRate) * mod.FireRateModifier(baseFireRate);
-        spread = baseSpread * scope.SpreadModifier(baseSpread) * stock.SpreadModifier(baseSpread)* mod.SpreadModifier(baseSpread);
-        range = baseRange * scope.RangeModifier(baseRange)*mod.RangeModifier(baseRange);
-        reloadTime = baseReloadTime * chamber.ReloadTimeModifier(baseReloadTime)*mod.ReloadTimeModifier(baseReloadTime);
+        damage = baseDamage * chamber.DamageModifier(baseDamage) * magazine.DamageModifier(baseDamage)* mod.DamageModifier();
+        fireRate = baseFireRate * chamber.FireRateModifier(baseFireRate) * mod.FireRateModifier();
+        spread = baseSpread * scope.SpreadModifier(baseSpread) * stock.SpreadModifier(baseSpread)* mod.SpreadModifier();
+        range = baseRange * scope.RangeModifier(baseRange)*mod.RangeModifier();
+        reloadTime = baseReloadTime * chamber.ReloadTimeModifier(baseReloadTime)*mod.ReloadTimeModifier();
         timeBetweenShoots = baseTimeBetweenShots;
-        knockbackStrength = baseKnockbackStrength * magazine.KnockbackStrengthModifier(baseKnockbackStrength)*mod.KnockbackStrengthModifier(baseKnockbackStrength);
-        bulletsPerTap = baseBulletsPerTap * mod.BulletPerTapModifier(baseBulletsPerTap);
-        magazineSize = baseMagazineSize * mod.MagazineSizeModifier(baseMagazineSize);
+        knockbackStrength = baseKnockbackStrength * magazine.KnockbackStrengthModifier(baseKnockbackStrength)*mod.KnockbackStrengthModifier();
+        bulletsPerTap = baseBulletsPerTap * mod.BulletPerTapModifier();
+        magazineSize = baseMagazineSize * mod.MagazineSizeModifier();
 
         //For Prefab Bullet
         if (magazine.bulletPrefab != null)
         {
             bulletPrefab = magazine.bulletPrefab;
             baseBulletSpeed = magazine.baseBulletSpeed;
-            bulletSpeed = baseBulletSpeed * barrel.BulletSpeedModifer(baseBulletSpeed)*mod.BulletSpeedModifier(baseBulletSpeed);
+            bulletSpeed = baseBulletSpeed * barrel.BulletSpeedModifer(baseBulletSpeed)*mod.BulletSpeedModifier();
         }
     }
 

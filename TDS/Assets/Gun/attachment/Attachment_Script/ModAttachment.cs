@@ -31,6 +31,7 @@ public class ModAttachment : ScriptableObject
     private float knockbackStrengthModifier;
     //For mode Function
     private bool DualModeOn = false;
+    private bool OrbiterOn = false;
     public void setModAttachmentModifier()
     {
         damageModifier = (1+f1.damageModifier) * (1 + f2.damageModifier) * (1 + f3.damageModifier);
@@ -38,7 +39,7 @@ public class ModAttachment : ScriptableObject
         spreadModifier = (1- f1.spreadModifier) * (1 - f2.spreadModifier) * (1 - f3.spreadModifier);
         rangeModifier = (1+f1.rangeModifier) *  (1 + f2.rangeModifier) * (1 + f3.rangeModifier);
         reloadTimeModifier = (1 - f1.reloadTimeModifier) * (1 - f2.reloadTimeModifier) * (1 - f3.reloadTimeModifier);
-        timeBetweenShootsModifier = (1-f1.timeBetweenShootsModifier) * (1-f2.timeBetweenShootsModifier) + (1-f3.timeBetweenShootsModifier);
+        timeBetweenShootsModifier = (1-f1.timeBetweenShootsModifier) * (1-f2.timeBetweenShootsModifier) * (1-f3.timeBetweenShootsModifier);
         bulletPerTapModifier = (1+f1.bulletPerTapModifier) * (1+f2.bulletPerTapModifier) * (1+f3.bulletPerTapModifier);
         bulletSpeedModifier = (1+f1.bulletSpeedModifier) * (1+f2.bulletSpeedModifier) * (1+f3.bulletSpeedModifier);
         magazineSizeModifier = (1+f1.magazineSizeModifier) * (1+f2.magazineSizeModifier) * (1+f3.magazineSizeModifier);
@@ -52,6 +53,7 @@ public class ModAttachment : ScriptableObject
         effect2 = f2.effect;
         effect3 = f3.effect;
 
+        //Dual Gun mode
         if (f1.effect== ModFunction.Effect.DualMode|| f2.effect == ModFunction.Effect.DualMode|| f3.effect == ModFunction.Effect.DualMode)
         {
             DualModeOn = true;
@@ -60,41 +62,50 @@ public class ModAttachment : ScriptableObject
         {
             DualModeOn = false;
         }
+        //Orbiter
+        if (f1.effect == ModFunction.Effect.Orbiter || f2.effect == ModFunction.Effect.Orbiter || f3.effect == ModFunction.Effect.Orbiter)
+        {
+            OrbiterOn = true;
+        }
+        else
+        {
+            OrbiterOn = false;
+        }
     }
 
-    public virtual float DamageModifier(float baseDamage)
+    public virtual float DamageModifier()
     {
         return damageModifier;
     }
-    public virtual float FireRateModifier(float baseFireRate)
+    public virtual float FireRateModifier()
     {
         return fireRateModifier;
     }
-    public virtual float SpreadModifier(float baseSpread)
+    public virtual float SpreadModifier()
     {
         return spreadModifier;
     }
-    public virtual float RangeModifier(float baseRange)
+    public virtual float RangeModifier()
     {
         return rangeModifier;
     }
-    public virtual float ReloadTimeModifier(float baseReloadTime)
+    public virtual float ReloadTimeModifier()
     {
         return reloadTimeModifier;
     }
-    public virtual int BulletPerTapModifier(int baseBulletPerTap)
+    public virtual int BulletPerTapModifier()
     {
         return bulletPerTapModifier;
     }
-    public virtual float BulletSpeedModifier(float baseBulletSpeed)
+    public virtual float BulletSpeedModifier()
     {
         return bulletSpeedModifier;
     }
-    public virtual int MagazineSizeModifier(int baseMagazineSize)
+    public virtual int MagazineSizeModifier()
     {
         return magazineSizeModifier;
     }
-    public virtual float KnockbackStrengthModifier(float baseKnockbackStrength)
+    public virtual float KnockbackStrengthModifier()
     {
         return knockbackStrengthModifier;
     }
@@ -128,5 +139,9 @@ public class ModAttachment : ScriptableObject
     public bool GetDualMode()
     {
         return DualModeOn;
+    }
+    public bool GetOrbiterOn()
+    {
+        return OrbiterOn;
     }
 }

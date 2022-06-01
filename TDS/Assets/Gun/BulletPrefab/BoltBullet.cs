@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class BoltBullet : BulletPrefab
 {
+    bool homingStop;
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Wall")
         {
             EffectOnHit();
             gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0,0,0);
+            gameObject.GetComponent<Rigidbody>().isKinematic = true;
             GameObject effect = Instantiate(muzzleFlash, transform.position, Quaternion.identity);
             Destroy(effect, 5);
             Destroy(gameObject, 0.5f);
@@ -19,7 +21,13 @@ public class BoltBullet : BulletPrefab
             Destroy(gameObject, 2f);
         }
     }
-
+    private void Update()
+    {
+        if (gameObject.GetComponent<Rigidbody>()!=null&&gameObject.GetComponent<Rigidbody>().isKinematic != true)
+        {
+            EffectWhileBulletFlying();
+        }
+    }
     public Vector3 getKnockbackDirection()
     {
         return knockbackDirection;

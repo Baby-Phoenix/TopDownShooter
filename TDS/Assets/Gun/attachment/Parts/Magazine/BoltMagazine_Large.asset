@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92a3e847d9e2e3e439de910e50d8f2e8, type: 3}
   m_Name: BoltMagazine_Large
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 5944240655050062002, guid: 1a7ba471ac602664aab9f6d527c905cc,
+  bulletPrefab: {fileID: 3288182100125077833, guid: ca2aae90dd4fd91459b7afca09be30d4,
     type: 3}
   isRaycast: 0
   canPenetrate: 1
   baseMagazineSize: 120
   knockbackStrengthModifer: 0.5
   damageModifer: 0
-  baseBulletSpeed: 12
+  baseBulletSpeed: 14

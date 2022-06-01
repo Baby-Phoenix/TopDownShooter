@@ -75,7 +75,7 @@ public class BulletPrefab : MonoBehaviour
                 Collider[] enemies = Physics.OverlapSphere(transform.position, 5, whatIsEnemy);
                 for (int i = 0; i < enemies.Length; i++)
                 {
-                    if (enemies[i].GetComponent<Rigidbody>())
+                    if (enemies[i].GetComponent<Rigidbody>() && enemies[i].tag == "Enemy")
                     {
                         enemies[i].GetComponent<Rigidbody>().AddExplosionForce(50, transform.position, 5);
                     }
@@ -89,7 +89,7 @@ public class BulletPrefab : MonoBehaviour
                 Collider[] enemies = Physics.OverlapSphere(transform.position, 5, whatIsEnemy);
                 for (int i = 0; i < enemies.Length; i++)
                 {
-                    if (enemies[i].GetComponent<Rigidbody>())
+                    if (enemies[i].GetComponent<Rigidbody>()&& enemies[i].tag == "Enemy")
                     {
                         enemies[i].GetComponent<Rigidbody>().AddExplosionForce(50, transform.position, 5);
                     }
@@ -103,7 +103,7 @@ public class BulletPrefab : MonoBehaviour
                 Collider[] enemies = Physics.OverlapSphere(transform.position, 5, whatIsEnemy);
                 for (int i = 0; i < enemies.Length; i++)
                 {
-                    if (enemies[i].GetComponent<Rigidbody>())
+                    if (enemies[i].GetComponent<Rigidbody>() && enemies[i].tag == "Enemy")
                     {
                         enemies[i].GetComponent<Rigidbody>().AddExplosionForce(50, transform.position, 5);
                     }
@@ -161,8 +161,7 @@ public class BulletPrefab : MonoBehaviour
     private void Homing()
     {
         Vector3 heading;
-        Debug.Log(Vector3.Distance(firePosition, transform.position));
-        if (target != null && Vector3.Distance(firePosition, transform.position) > 3)
+        if (target != null && gameObject.GetComponent<Rigidbody>()!=null&& Vector3.Distance(firePosition, transform.position) > 3)
         {
             heading = target.transform.position - transform.position;
             heading.Normalize();

@@ -35,13 +35,13 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-    private IEnumerator FollowTarget()
+    public IEnumerator FollowTarget()
     {
         WaitForSeconds wait = new WaitForSeconds(updateSpeed);
 
         while (enabled)
         {
-            if(currentTarget != null)
+            if(currentTarget != null && agent.enabled==true)
                 agent.SetDestination(currentTarget.transform.position);
 
             yield return wait;

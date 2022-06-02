@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class BulletPrefab : MonoBehaviour
 {
@@ -77,6 +78,10 @@ public class BulletPrefab : MonoBehaviour
                 {
                     if (enemies[i].GetComponent<Rigidbody>() && enemies[i].tag == "Enemy")
                     {
+                        if (enemies[i].gameObject.GetComponent<NavMeshAgent>().isActiveAndEnabled)
+                        {
+                            enemies[i].gameObject.GetComponent<NavMeshAgent>().enabled = false;
+                        }
                         enemies[i].GetComponent<Rigidbody>().AddExplosionForce(50, transform.position, 5);
                     }
                 }

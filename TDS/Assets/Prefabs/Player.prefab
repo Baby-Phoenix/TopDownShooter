@@ -1734,10 +1734,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe4b73afc95fe454baac2af7e9247eb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  firePoint: {fileID: 0}
+  bullet: {fileID: 0}
   playerSpeed: 5
   gravityValue: -9.81
   controllerDeadZone: 0.11
   gamepadRotateSmoothing: 1000
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 8
   anim: {fileID: 4329313615598376545}
   isGamepad: 0
   jump: 0

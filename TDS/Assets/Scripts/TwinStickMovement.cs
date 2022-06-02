@@ -7,16 +7,20 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInput))]
 public class TwinStickMovement : MonoBehaviour
 {
+    public Transform firePoint;
 
     [SerializeField] private float playerSpeed = 5f;
     [SerializeField] private float gravityValue = -9.81f;
     [SerializeField] private float controllerDeadZone = 0.11f;
     [SerializeField] private float gamepadRotateSmoothing = 1000f;
 
+    [SerializeField] private LayerMask groundMask;
+
     public Animator anim;
 
     [SerializeField] private bool isGamepad;
 
+    private Camera mainCamera;
     private CharacterController controller;
     private bool isJump = false;
     private bool isGrounded = false;
@@ -40,6 +44,11 @@ public class TwinStickMovement : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
     }
 
+    private void Start()
+    {
+        mainCamera = Camera.main;
+    }
+
     private void OnEnable()
     {
         playerControls.Enable();
@@ -56,7 +65,6 @@ public class TwinStickMovement : MonoBehaviour
         HandleInput();
         HandleMovement();
         HandleRotation();
-
     }
 
     void HandleInput()
@@ -137,14 +145,28 @@ public class TwinStickMovement : MonoBehaviour
             //Point on screen from ray
             if (isTopDown)
             {
-                Ray ray = Camera.main.ScreenPointToRay(aim);
-                Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
-                float rayDistance;
+                //Ray ray = Camera.main.ScreenPointToRay(aim);
+                //Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+                //float rayDistance;
 
-                if (groundPlane.Raycast(ray, out rayDistance))
+                //if (groundPlane.Raycast(ray, out rayDistance))
+                //{
+                //    Vector3 point = ray.GetPoint(rayDistance);
+
+                //    LookAt(point);
+                //}
+
+                var (success, position) = GetMousePosition();
+                if(success)
                 {
-                    Vector3 point = ray.GetPoint(rayDistance);
-                    LookAt(point);
+                    //Calculate the direction
+                    var direction = position - transform.position;
+
+                    direction.y = 0;
+
+                    //Make transform look in the direction
+                    transform.forward = direction;
+                    transform.Find("Fire_point").forward = direction;
                 }
             }
             else
@@ -155,6 +177,22 @@ public class TwinStickMovement : MonoBehaviour
 
                 transform.LookAt(heightCorrectedPoint, Vector3.up);
             }
+        }
+    }
+
+    private (bool success, Vector3 position) GetMousePosition()
+    {
+        var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+
+        if(Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, groundMask))
+        {
+            //Raycast hit something and returns position
+            return (success: true, position: hitInfo.point);
+        }
+        else
+        {
+            //Raycast did not hit anything
+            return (success: false, position: Vector3.zero);
         }
     }
 

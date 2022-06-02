@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class BoltKnockHitbox : BoltBullet
 {
@@ -22,6 +23,9 @@ public class BoltKnockHitbox : BoltBullet
     {
         if (other.gameObject.tag == "Enemy")
         {
+            if (other.gameObject.GetComponent<NavMeshAgent>().isActiveAndEnabled) {
+                other.gameObject.GetComponent<NavMeshAgent>().enabled = false;
+            }
             //mod.ModEffect1(new Vector3(0, 0, 0));
             Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
             rb.AddForce(transform.parent.GetComponent<BoltBullet>().getKnockbackDirection().normalized * transform.parent.GetComponent<BoltBullet>().getKnockbackStrength()/4, ForceMode.Impulse);

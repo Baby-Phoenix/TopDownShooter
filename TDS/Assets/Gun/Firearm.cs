@@ -300,15 +300,23 @@ public class Firearm : MonoBehaviour
 
         //set damage and knockback strength before Instantiate bullet
         GameObject bullet = Instantiate(gun.getBulletPrefab(), shootingPoint.position, shootingPoint.rotation);
-        bullet.GetComponent<BulletPrefab>().setDamage(gun.getDamege());
-        bullet.GetComponent<BulletPrefab>().setKnockbackStrength(gun.getKnockbackStrength());
+        if (gun.getIsShotgun())
+        {
+            bullet.GetComponent<BulletPrefab>().setKnockbackStrength(gun.getKnockbackStrength()/ gun.getBulletsPerTap());
+            bullet.GetComponent<BulletPrefab>().setDamage(gun.getDamege()/8);
+        }
+        else
+        {
+            bullet.GetComponent<BulletPrefab>().setKnockbackStrength(gun.getKnockbackStrength());
+            bullet.GetComponent<BulletPrefab>().setDamage(gun.getDamege());
+        }
         bullet.GetComponent<BulletPrefab>().setKnockbackDirection(new Vector3(direction.x,0, direction.z));
         bullet.GetComponent<BulletPrefab>().setModFunction1(gun.mod.GetEffect1());
         bullet.GetComponent<BulletPrefab>().setModFunction2(gun.mod.GetEffect2());
         bullet.GetComponent<BulletPrefab>().setModFunction3(gun.mod.GetEffect3());
         bullet.GetComponent<BulletPrefab>().setBulletSpeed(gun.getBulletSpeed());
         bullet.GetComponent<BulletPrefab>().setFirePosition(gameObject.transform.position);
-        bullet.GetComponent<Rigidbody>().velocity = direction * gun.getBulletSpeed();
+        bullet.GetComponent<Rigidbody>().velocity = direction.normalized * gun.getBulletSpeed();
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
 
     }

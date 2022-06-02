@@ -22,17 +22,18 @@ public class Target : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
+     
         if (gameObject.GetComponent<NavMeshAgent>().enabled == false&& NearZeroVector(gameObject.GetComponent<Rigidbody>().velocity))
         {
-            Debug.Log("pushing it back");
+            Debug.Log("Hi");
             gameObject.GetComponent<NavMeshAgent>().enabled = true;
             gameObject.GetComponent<EnemyMovement>().FollowTarget();
         }
     }
     public bool NearZeroVector(Vector3 v)
     {
-        return v.sqrMagnitude < 0.01;
+        return v.sqrMagnitude < 0.1;
     }
 }

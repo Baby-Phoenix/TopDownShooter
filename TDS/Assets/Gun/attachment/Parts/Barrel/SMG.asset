@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c24a5f4210a2d0a4aa6c010a496060c4, type: 3}
   m_Name: SMG
   m_EditorClassIdentifier: 
-  baseDamage: 0.5
+  baseDamage: 2
   baseFireRate: 0.15
   baseSpread: 0.15
   baseRange: 100
   baseReloadTime: 1
   baseTimeBetweenShoots: 0
-  baseKnockbackStrength: 0.08
+  baseKnockbackStrength: 0.1
   bulletSpeedModifer: 0
   baseBulletsPerTap: 1
   isShotgun: 0

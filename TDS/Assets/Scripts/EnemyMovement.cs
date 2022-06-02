@@ -41,9 +41,8 @@ public class EnemyMovement : MonoBehaviour
 
         while (enabled)
         {
-            if(currentTarget != null && agent.enabled==true)
+            if(currentTarget != null && agent.enabled)
                 agent.SetDestination(currentTarget.transform.position);
-
             yield return wait;
         }
     }    

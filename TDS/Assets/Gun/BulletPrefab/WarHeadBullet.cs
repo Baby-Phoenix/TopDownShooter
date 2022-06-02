@@ -14,12 +14,13 @@ public class WarheadBullet : BulletPrefab
             Rigidbody rb = collision.gameObject.GetComponent<Rigidbody>();
             if (rb != null && collision.gameObject.tag == "Enemy") 
             {
+                collision.gameObject.GetComponent<Target>().TakeDamage(damage);
+                Debug.Log(knockbackStrength);
+                rb.AddForce(knockbackDirection * knockbackStrength, ForceMode.Impulse);
                 if (collision.gameObject.GetComponent<NavMeshAgent>().isActiveAndEnabled)
                 {
                     collision.gameObject.GetComponent<NavMeshAgent>().enabled = false;
                 }
-                collision.gameObject.GetComponent<Target>().TakeDamage(damage);
-                rb.AddForce(knockbackDirection.normalized * knockbackStrength, ForceMode.Impulse);
             }
             Destroy(effect, 2);
             Destroy(gameObject);

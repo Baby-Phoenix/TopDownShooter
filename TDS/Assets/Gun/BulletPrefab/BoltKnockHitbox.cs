@@ -28,6 +28,7 @@ public class BoltKnockHitbox : BoltBullet
             }
             //mod.ModEffect1(new Vector3(0, 0, 0));
             Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
+
             rb.AddForce(transform.parent.GetComponent<BoltBullet>().getKnockbackDirection().normalized * transform.parent.GetComponent<BoltBullet>().getKnockbackStrength()/4, ForceMode.Impulse);
         }
     }

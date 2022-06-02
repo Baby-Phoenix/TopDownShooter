@@ -6,101 +6,142 @@ using UnityEngine;
 
 public class ModAttachment : ScriptableObject
 {
+    public ModFunction f1;
+    public ModFunction f2;
+    public ModFunction f3;
 
-    //For modAttachment
-    public delegate void OnBulletHitEnemyModEffect(Vector3 pos);
-    public static event OnBulletHitEnemyModEffect OnBulletHitEnemy;
+    private ModFunction.EffectType effectType1;
+    private ModFunction.Effect effect1;
 
-    public delegate void OnBulletHitModEffect(Vector3 pos);
-    public static event OnBulletHitModEffect OnBulletHit;
+    private ModFunction.EffectType effectType2;
+    private ModFunction.Effect effect2;
 
-    public delegate void OnFiringModEffect(Vector3 pos);
-    public static event OnFiringModEffect OnFiring;
-    public enum EffectType { NoEffect = 0, EffectOnBulletHitEnemy = 1, EffectOnBulletHit = 2, EffectOnFiring = 3, Enchant = 4 };
-    public enum Effect { Explosive = 0 };
+    private ModFunction.EffectType effectType3;
+    private ModFunction.Effect effect3;
 
-    public EffectType effectType1;
-    public EffectType effectType2;
-    public EffectType effectType3;
-
-    public Effect effect1;
-    public Effect effect2;
-    public Effect effect3;
-
-    public GameObject explosion;
-    private Vector3 position;
-
-
-    public void OnEnable()
+    private float damageModifier;
+    private float fireRateModifier;
+    private float spreadModifier;
+    private float rangeModifier;
+    private float reloadTimeModifier;
+    private float timeBetweenShootsModifier;
+    private int bulletPerTapModifier;
+    private float bulletSpeedModifier;
+    private int magazineSizeModifier;
+    private float knockbackStrengthModifier;
+    //For mode Function
+    private bool DualModeOn = false;
+    private bool OrbiterOn = false;
+    public void setModAttachmentModifier()
     {
-        //Firearm.OnBulletHitEnemy += ModEffect1;
-    }
-    public void OnDisable()
-    {
+        damageModifier = (1+f1.damageModifier) * (1 + f2.damageModifier) * (1 + f3.damageModifier);
+        fireRateModifier = (1 - f1.fireRateModifier) * (1 - f2.fireRateModifier) * (1 - f3.fireRateModifier);
+        spreadModifier = (1- f1.spreadModifier) * (1 - f2.spreadModifier) * (1 - f3.spreadModifier);
+        rangeModifier = (1+f1.rangeModifier) *  (1 + f2.rangeModifier) * (1 + f3.rangeModifier);
+        reloadTimeModifier = (1 - f1.reloadTimeModifier) * (1 - f2.reloadTimeModifier) * (1 - f3.reloadTimeModifier);
+        timeBetweenShootsModifier = (1-f1.timeBetweenShootsModifier) * (1-f2.timeBetweenShootsModifier) * (1-f3.timeBetweenShootsModifier);
+        bulletPerTapModifier = (1+f1.bulletPerTapModifier) * (1+f2.bulletPerTapModifier) * (1+f3.bulletPerTapModifier);
+        bulletSpeedModifier = (1+f1.bulletSpeedModifier) * (1+f2.bulletSpeedModifier) * (1+f3.bulletSpeedModifier);
+        magazineSizeModifier = (1+f1.magazineSizeModifier) * (1+f2.magazineSizeModifier) * (1+f3.magazineSizeModifier);
+        knockbackStrengthModifier = (1 + f1.knockbackStrengthModifier) * (1 + f2.knockbackStrengthModifier) * (1 + f3.knockbackStrengthModifier);
 
-        //Firearm.OnBulletHitEnemy -= ModEffect1;
-    }
+        effectType1 = f1.effectType;
+        effectType2 = f2.effectType;
+        effectType3 = f3.effectType;
 
-    public virtual void ModEffect1(Vector3 pos){
-        if (effectType1 != EffectType.NoEffect) // if there is a effect on the mod
+        effect1 = f1.effect;
+        effect2 = f2.effect;
+        effect3 = f3.effect;
+
+        //Dual Gun mode
+        if (f1.effect== ModFunction.Effect.DualMode|| f2.effect == ModFunction.Effect.DualMode|| f3.effect == ModFunction.Effect.DualMode)
         {
-            if (effectType1 == EffectType.EffectOnBulletHitEnemy) // if the effect type is to appear when collided with the enemy
-            {
-                switch (effect1) {
-                    case Effect.Explosive:
-                        OnBulletHitEnemy += Explosive; //the explosion fuction is added to the OnbulletHitenemy fuction which call does the explosion
-                        break;
-                }
-                OnBulletHitEnemy(pos);
-            }
-            else if (effectType1 == EffectType.EffectOnBulletHit)// if the effect type is to appear when collided with anything
-            {
-                switch (effect1)
-                {
-                    case Effect.Explosive:
-                        OnBulletHit += Explosive; //the explosion fuction is added to the OnBulletHit fuction which call does the explosion
-                        break;
-                }
-
-                OnBulletHit(pos);
-            }
-            else if(effectType1 == EffectType.EffectOnFiring)// if the effect type is to appear when the bullet is fired
-            {
-                switch (effect1)
-                {
-                    case Effect.Explosive:
-                        OnFiring += Explosive; //the explosion fuction is added to the OnFiring fuction which call does the explosion
-                        break;
-                }
-                OnFiring(pos);
-            }
-            else //Enchant
-            {
-
-            }
+            DualModeOn = true;
         }
-    }
-    public virtual void ModEffect2() { 
-    
-    }
-    public virtual void ModEffect3() {
-    
-    }
-
-
-    public void Explosive(Vector3 pos)
-    {
-        Debug.Log(pos);
-        Instantiate(explosion, pos, Quaternion.identity);
-        Collider[] enemies = Physics.OverlapSphere(pos, 5);
-        for (int i = 0; i < enemies.Length; i++)
+        else
         {
-            Debug.Log(enemies[i]);
-            if (enemies[i].GetComponent<Rigidbody>())
-            {
-                enemies[i].GetComponent<Rigidbody>().AddExplosionForce(100, pos, 5);
-            }
+            DualModeOn = false;
+        }
+        //Orbiter
+        if (f1.effect == ModFunction.Effect.Orbiter || f2.effect == ModFunction.Effect.Orbiter || f3.effect == ModFunction.Effect.Orbiter)
+        {
+            OrbiterOn = true;
+        }
+        else
+        {
+            OrbiterOn = false;
         }
     }
 
+    public virtual float DamageModifier()
+    {
+        return damageModifier;
+    }
+    public virtual float FireRateModifier()
+    {
+        return fireRateModifier;
+    }
+    public virtual float SpreadModifier()
+    {
+        return spreadModifier;
+    }
+    public virtual float RangeModifier()
+    {
+        return rangeModifier;
+    }
+    public virtual float ReloadTimeModifier()
+    {
+        return reloadTimeModifier;
+    }
+    public virtual int BulletPerTapModifier()
+    {
+        return bulletPerTapModifier;
+    }
+    public virtual float BulletSpeedModifier()
+    {
+        return bulletSpeedModifier;
+    }
+    public virtual int MagazineSizeModifier()
+    {
+        return magazineSizeModifier;
+    }
+    public virtual float KnockbackStrengthModifier()
+    {
+        return knockbackStrengthModifier;
+    }
+
+    public ModFunction.EffectType GetEffectType1()
+    {
+        return effectType1;
+    }
+    public ModFunction.EffectType GetEffectType2()
+    {
+        return effectType2;
+    }
+    public ModFunction.EffectType GetEffectType3()
+    {
+        return effectType3;
+    }
+
+    public ModFunction.Effect GetEffect1()
+    {
+        return effect1;
+    }
+    public ModFunction.Effect GetEffect2()
+    {
+        return effect2;
+    }
+    public ModFunction.Effect GetEffect3()
+    {
+        return effect3;
+    }
+
+    public bool GetDualMode()
+    {
+        return DualModeOn;
+    }
+    public bool GetOrbiterOn()
+    {
+        return OrbiterOn;
+    }
 }

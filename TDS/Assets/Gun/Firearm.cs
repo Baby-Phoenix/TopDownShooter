@@ -11,36 +11,40 @@ public class Firearm : MonoBehaviour
     //bools
     bool shooting, readyToShoot, reloading;
     bool allowInvoke = true;
-
+    //For Dual Mode
+    bool dualMode = false;
+    bool IsShootingFromLeft = true;
+    //For Orbiter Mod
+    bool orbiterOn = false;
     //Reference
     public Gun gun;
     public Transform attackPoint;
+
+    public Transform attackPointLeft;
+    public Transform attackPointRight;
+
     public RaycastHit rayHit;
     public LayerMask whatIsEnemy;
 
+    public GameObject orbiter;
+    GameObject OB;
     //Graphics
     public GameObject muzzleFlash, HitEffect;
     public TextMeshProUGUI text;
-
-    //For modAttachment
-    public delegate void OnBulletHitEnemyModEffect(Vector3 pos);
-    public static event OnBulletHitEnemyModEffect OnBulletHitEnemy;
-
-    public delegate void OnBulletHitModEffect(Vector3 pos);
-    public static event OnBulletHitModEffect OnBulletHit;
-
-    public delegate void OnFiringModEffect(Vector3 pos);
-    public static event OnFiringModEffect OnFiring;
+    public GameObject explosion;
 
     private void Awake()
     {
         gun.GunUpdate();
+        ConstantEffect();
         bulletsLeft = gun.getMagazineSize();
         readyToShoot = true;
     }
 
     private void Update()
     {
+        gun.GunUpdate();
+        ConstantEffect();
         PlayerInput();
         text.SetText(bulletsLeft + " / " + gun.getMagazineSize());
     }
@@ -82,10 +86,23 @@ public class Firearm : MonoBehaviour
         float x = Random.Range(-gun.getSpread(), gun.getSpread());
         float y = Random.Range(-gun.getSpread(), gun.getSpread());
         float z = Random.Range(-gun.getSpread(), gun.getSpread());
-
+        Vector3 direction;
         //Calculate Direction with the spread
-        Vector3 direction = attackPoint.forward + new Vector3(x, y, z); ;
-
+        if (!dualMode)
+        {
+            direction = attackPoint.forward + new Vector3(x, y, z); ;
+        }
+        else
+        {
+            if (IsShootingFromLeft)
+            {
+                direction = attackPointLeft.forward + new Vector3(x, y, z);
+            }
+            else
+            {
+                direction = attackPointRight.forward + new Vector3(x, y, z);
+            }
+        }
         if (gun.getIsRaycast())
         {
             //cheack if the Raycast Bullet can penetrate enemy
@@ -106,6 +123,7 @@ public class Firearm : MonoBehaviour
         if (!gun.getIsShotgun())
         {
             bulletsLeft--;
+            IsShootingFromLeft = !IsShootingFromLeft;
         }
         bulletsShot--;
 
@@ -120,7 +138,11 @@ public class Firearm : MonoBehaviour
         }
         if (bulletsShot <= 0 && gun.getIsShotgun())
         {
-            bulletsLeft--;
+            if (bulletsLeft != 0)
+            {
+                bulletsLeft--;
+            }
+            IsShootingFromLeft = !IsShootingFromLeft;
         }
 
     }
@@ -156,16 +178,30 @@ public class Firearm : MonoBehaviour
     //Fire fuction for 4 type of bullet
     //Raycast Bullet
     private void RaycastFire(Vector3 direction) {
-        if (Physics.Raycast(attackPoint.position, direction, out rayHit, gun.getRange(), whatIsEnemy))
+        Transform shootingPoint;
+
+        if (!dualMode)
         {
-            /*if (OnBulletHitEnemy != null)
+            shootingPoint = attackPoint;
+        }
+        else
+        {
+            if (IsShootingFromLeft)
             {
-                OnBulletHitEnemy(rayHit.point);
-            }*/
+                shootingPoint = attackPointLeft;
+            }
+            else
+            {
+                shootingPoint = attackPointRight;
+            }
+        }
+
+        if (Physics.Raycast(shootingPoint.position, direction, out rayHit, gun.getRange(), whatIsEnemy))
+        {
             Target target = rayHit.transform.GetComponent<Target>();
             if (rayHit.collider.CompareTag("Enemy"))
             {
-                gun.mod.ModEffect1(target.transform.position);
+                EffectOnHit(rayHit.transform.position);
                 Rigidbody rb = rayHit.transform.gameObject.GetComponent<Rigidbody>();
                 direction.y = 0;
                 rb.AddForce(direction.normalized * gun.getKnockbackStrength(), ForceMode.Impulse);
@@ -173,13 +209,14 @@ public class Firearm : MonoBehaviour
             }
             //GFX
             Instantiate(HitEffect, rayHit.point, Quaternion.Euler(0, 180, 0));
-            Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
+            Instantiate(muzzleFlash, shootingPoint.position, Quaternion.identity);
         }
         else
         {
+            EffectOnHit(shootingPoint.forward * 100);
             //Graphics
-            Instantiate(HitEffect, attackPoint.forward * 100, Quaternion.Euler(0, 180, 0));
-            Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
+            Instantiate(HitEffect, shootingPoint.forward * 100, Quaternion.Euler(0, 180, 0));
+            Instantiate(muzzleFlash, shootingPoint.position, Quaternion.identity);
         }
     }
 
@@ -190,7 +227,26 @@ public class Firearm : MonoBehaviour
         RaycastHit[] hits;
         Target target;
         Rigidbody rb;
-        hits = Physics.RaycastAll(attackPoint.position, direction, gun.getRange(), whatIsEnemy);
+
+        Transform shootingPoint;
+
+        if (!dualMode)
+        {
+            shootingPoint = attackPoint;
+        }
+        else
+        {
+            if (IsShootingFromLeft)
+            {
+                shootingPoint = attackPointLeft;
+            }
+            else
+            {
+                shootingPoint = attackPointRight;
+            }
+        }
+
+        hits = Physics.RaycastAll(shootingPoint.position, direction, gun.getRange(), whatIsEnemy);
         if (hits != null)
         {
             for (int i = 0; i < hits.Length; i++)
@@ -198,40 +254,145 @@ public class Firearm : MonoBehaviour
                 hit = hits[i];
                 if (hit.collider.CompareTag("Enemy"))
                 {
-                    gun.mod.ModEffect1(hit.transform.position);
                     target = hit.transform.GetComponent<Target>();
-
                     rb = hit.transform.gameObject.GetComponent<Rigidbody>();
                     direction.y = 0;
                     rb.AddForce(direction.normalized * gun.getKnockbackStrength(), ForceMode.Impulse);
                     target.TakeDamage(gun.getDamege());
                 }
+                EffectOnHit(hit.point);
                 //Graphics
                 Instantiate(HitEffect, hit.point, Quaternion.Euler(0, 180, 0));
-                Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
+                Instantiate(muzzleFlash, shootingPoint.position, Quaternion.identity);
             }
         }
         else
         {
+            EffectOnHit(shootingPoint.forward * 100);
             //Graphics
-            Instantiate(HitEffect, attackPoint.forward * 100, Quaternion.Euler(0, 180, 0));
-            Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
+            Instantiate(HitEffect, shootingPoint.forward * 100, Quaternion.Euler(0, 180, 0));
+            Instantiate(muzzleFlash, shootingPoint.position, Quaternion.identity);
         }
     }
 
     //Prefab Bullet
     private void PrefabBulletFire(Vector3 direction)
     {
+        Transform shootingPoint;
+
+        if (!dualMode)
+        {
+            shootingPoint = attackPoint;
+        }
+        else
+        {
+            if (IsShootingFromLeft)
+            {
+                //Debug.Log("Left");
+                shootingPoint = attackPointLeft;
+            }
+            else
+            {
+                //Debug.Log("Right");
+                shootingPoint = attackPointRight;
+            }
+        }
+
         //set damage and knockback strength before Instantiate bullet
-        GameObject bullet = Instantiate(gun.getBulletPrefab(), attackPoint.position, attackPoint.rotation);
+        GameObject bullet = Instantiate(gun.getBulletPrefab(), shootingPoint.position, shootingPoint.rotation);
         bullet.GetComponent<BulletPrefab>().setDamage(gun.getDamege());
         bullet.GetComponent<BulletPrefab>().setKnockbackStrength(gun.getKnockbackStrength());
-        bullet.GetComponent<BulletPrefab>().setKnockbackDirection(direction);
+        bullet.GetComponent<BulletPrefab>().setKnockbackDirection(new Vector3(direction.x,0, direction.z));
+        bullet.GetComponent<BulletPrefab>().setModFunction1(gun.mod.GetEffect1());
+        bullet.GetComponent<BulletPrefab>().setModFunction2(gun.mod.GetEffect2());
+        bullet.GetComponent<BulletPrefab>().setModFunction3(gun.mod.GetEffect3());
+        bullet.GetComponent<BulletPrefab>().setBulletSpeed(gun.getBulletSpeed());
+        bullet.GetComponent<BulletPrefab>().setFirePosition(gameObject.transform.position);
+        bullet.GetComponent<Rigidbody>().velocity = direction * gun.getBulletSpeed();
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
 
-        bullet.GetComponent<BulletPrefab>().mod = gun.mod;
-
-        rb.AddForce(direction * gun.getBulletSpeed(), ForceMode.Impulse);
     }
 
+    public int getAmmoLeft()
+    {
+        return bulletsLeft;
+    }
+
+    //Mod
+    protected virtual void EffectOnHit(Vector3 hitPoint)
+    {
+        switch (gun.mod.GetEffect1())
+        {
+            case ModFunction.Effect.Explosive:
+                if (explosion != null) Instantiate(explosion, hitPoint, Quaternion.identity);
+                Collider[] enemies = Physics.OverlapSphere(hitPoint, 5, whatIsEnemy);
+                for (int i = 0; i < enemies.Length; i++)
+                {
+                    if (enemies[i].GetComponent<Rigidbody>())
+                    {
+                        enemies[i].GetComponent<Rigidbody>().AddExplosionForce(70, hitPoint, 5);
+                    }
+                }
+                break;
+        }
+
+        switch (gun.mod.GetEffect2())
+        {
+            case ModFunction.Effect.Explosive:
+                if (explosion != null) Instantiate(explosion, hitPoint, Quaternion.identity);
+                Collider[] enemies = Physics.OverlapSphere(hitPoint, 5, whatIsEnemy);
+                for (int i = 0; i < enemies.Length; i++)
+                {
+                    if (enemies[i].GetComponent<Rigidbody>())
+                    {
+                        enemies[i].GetComponent<Rigidbody>().AddExplosionForce(70, hitPoint, 5);
+                    }
+                }
+                break;
+        }
+
+        switch (gun.mod.GetEffect3())
+        {
+            case ModFunction.Effect.Explosive:
+                if (explosion != null) Instantiate(explosion, hitPoint, Quaternion.identity);
+                Collider[] enemies = Physics.OverlapSphere(hitPoint, 5, whatIsEnemy);
+                for (int i = 0; i < enemies.Length; i++)
+                {
+                    if (enemies[i].GetComponent<Rigidbody>())
+                    {
+                        enemies[i].GetComponent<Rigidbody>().AddExplosionForce(70, hitPoint, 5);
+                    }
+                }
+                break;
+        }
+
+        switch (gun.mod.GetEffect3())
+        {
+            case ModFunction.Effect.Explosive:
+                if (explosion != null) Instantiate(explosion, hitPoint, Quaternion.identity);
+                Collider[] enemies = Physics.OverlapSphere(hitPoint, 5, whatIsEnemy);
+                for (int i = 0; i < enemies.Length; i++)
+                {
+                    if (enemies[i].GetComponent<Rigidbody>())
+                    {
+                        enemies[i].GetComponent<Rigidbody>().AddExplosionForce(70, hitPoint, 5);
+                    }
+                }
+                break;
+        }
+    }
+    protected virtual void ConstantEffect()
+    {
+        dualMode = gun.mod.GetDualMode();
+        orbiterOn = gun.mod.GetOrbiterOn();
+        if (orbiterOn && OB == null)
+        {
+            OB = Instantiate(orbiter, transform.position, Quaternion.identity);
+            OB.GetComponent<Rotate>().setPlayer(gameObject);
+        }
+        else if(!orbiterOn && OB != null)
+        {
+            Destroy(OB.gameObject);
+        }
+    }
 }

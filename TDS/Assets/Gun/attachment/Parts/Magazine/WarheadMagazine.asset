@@ -19,4 +19,4 @@ MonoBehaviour:
   baseMagazineSize: 30
   knockbackStrengthModifer: 0
   damageModifer: 0
-  baseBulletSpeed: 10
+  baseBulletSpeed: 8

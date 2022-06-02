@@ -16,3 +16,4 @@ MonoBehaviour:
   isHandLoaded: 1
   damageModifer: 0.2
   fireRateModifer: 0
+  reloadTimeModifer: 0.4

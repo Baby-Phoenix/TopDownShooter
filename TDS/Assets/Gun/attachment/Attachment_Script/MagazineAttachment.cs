@@ -19,11 +19,11 @@ public class MagazineAttachment : ScriptableObject
 
     public virtual float DamageModifier(float baseDamage)
     {
-        return baseDamage * damageModifer;
+        return 1+ damageModifer;
     }
 
     public virtual float KnockbackStrengthModifier(float baseKnockbackStrengthModifer)
     {
-        return knockbackStrengthModifer * baseKnockbackStrengthModifer;
+        return 1 + knockbackStrengthModifer ;
     }
 }

@@ -8,15 +8,22 @@ public class WarheadBullet : BulletPrefab
     {
         if (collision.gameObject.tag == "Wall" || collision.gameObject.tag == "Enemy")
         {
+
+            EffectOnHit();
             GameObject effect = Instantiate(muzzleFlash, transform.position, Quaternion.identity);
             Rigidbody rb = collision.gameObject.GetComponent<Rigidbody>();
             if (rb != null && collision.gameObject.tag == "Enemy") 
             {
-                mod.ModEffect1(collision.transform.position);
+                collision.gameObject.GetComponent<Target>().TakeDamage(damage);
                 rb.AddForce(knockbackDirection.normalized * knockbackStrength, ForceMode.Impulse);
             }
-            Destroy(effect, 5);
+            Destroy(effect, 2);
             Destroy(gameObject);
         }
+    }
+
+    private void Update()
+    {
+        EffectWhileBulletFlying();
     }
 }

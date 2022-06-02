@@ -1736,8 +1736,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe4b73afc95fe454baac2af7e9247eb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firePoint: {fileID: 0}
-  bullet: {fileID: 0}
+  firePoint: {fileID: 4329313616431841731}
   playerSpeed: 5
   gravityValue: -9.81
   controllerDeadZone: 0.11
@@ -1762,9 +1761,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gun: {fileID: 11400000, guid: 18fe4832d4292044aab6cd198ee4d6ea, type: 2}
   attackPoint: {fileID: 4329313616431841731}
+  attackPointLeft: {fileID: 1273950366561819906}
+  attackPointRight: {fileID: 4800006192051967023}
   whatIsEnemy:
     serializedVersion: 2
     m_Bits: 2147483647
+  orbiter: {fileID: 1481489157385248063, guid: 2bbae1a75e2a72344a940f3af8b97136, type: 3}
   muzzleFlash: {fileID: 279531126616779420, guid: 6cfce6a33605e0f4eafd8adda7f2201c,
     type: 3}
   HitEffect: {fileID: 279531126616779420, guid: 6cfce6a33605e0f4eafd8adda7f2201c,

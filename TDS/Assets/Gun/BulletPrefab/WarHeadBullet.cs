@@ -19,8 +19,7 @@ public class WarheadBullet : BulletPrefab
                 rb.AddForce(knockbackDirection * knockbackStrength, ForceMode.Impulse);
                 if (collision.gameObject.GetComponent<NavMeshAgent>().isActiveAndEnabled)
                 {
-                    collision.gameObject.GetComponent<NavMeshAgent>().enabled = false;
-                }
+                    collision.gameObject.GetComponent<NavMeshAgent>().enabled = false;               }
             }
             Destroy(effect, 2);
             Destroy(gameObject);

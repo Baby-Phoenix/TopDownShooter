@@ -17,6 +17,7 @@ public class MagazineAttachment : ScriptableObject
 
     public float baseBulletSpeed;// For Prefab Bullet 
 
+    public float baseStun;
     public virtual float DamageModifier(float baseDamage)
     {
         return 1+ damageModifer;

@@ -310,6 +310,7 @@ public class Firearm : MonoBehaviour
             bullet.GetComponent<BulletPrefab>().setKnockbackStrength(gun.getKnockbackStrength());
             bullet.GetComponent<BulletPrefab>().setDamage(gun.getDamege());
         }
+        bullet.GetComponent<BulletPrefab>().setStunPower(gun.getStunPower());
         bullet.GetComponent<BulletPrefab>().setKnockbackDirection(new Vector3(direction.x,0, direction.z));
         bullet.GetComponent<BulletPrefab>().setModFunction1(gun.mod.GetEffect1());
         bullet.GetComponent<BulletPrefab>().setModFunction2(gun.mod.GetEffect2());

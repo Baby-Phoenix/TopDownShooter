@@ -15,11 +15,13 @@ public class WarheadBullet : BulletPrefab
             if (rb != null && collision.gameObject.tag == "Enemy") 
             {
                 collision.gameObject.GetComponent<Target>().TakeDamage(damage);
-                Debug.Log(knockbackStrength);
+                Debug.Log(stunPower);
+                collision.gameObject.GetComponent<Target>().Stun(stunPower);
                 rb.AddForce(knockbackDirection * knockbackStrength, ForceMode.Impulse);
-                if (collision.gameObject.GetComponent<NavMeshAgent>().isActiveAndEnabled)
+                if (collision.gameObject.GetComponent<NavMeshAgent>().isActiveAndEnabled&& collision.gameObject.GetComponent<Target>().IsStun())
                 {
-                    collision.gameObject.GetComponent<NavMeshAgent>().enabled = false;               }
+                    collision.gameObject.GetComponent<NavMeshAgent>().enabled = false;               
+                }
             }
             Destroy(effect, 2);
             Destroy(gameObject);

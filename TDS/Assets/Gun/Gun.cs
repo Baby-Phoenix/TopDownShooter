@@ -16,7 +16,7 @@ public class Gun : ScriptableObject
     private GameObject bulletPrefab;
 
     private float damage;
-    private float fireRate, spread, range, reloadTime, timeBetweenShoots, knockbackStrength, bulletSpeed;
+    private float fireRate, spread, range, reloadTime, timeBetweenShoots, knockbackStrength, bulletSpeed,stunPower;
     private int magazineSize, bulletsPerTap;
     private bool allowButtonHold;
     private int bulletsLeft, bulletsShot;
@@ -34,6 +34,7 @@ public class Gun : ScriptableObject
         float baseTimeBetweenShots;
         float baseKnockbackStrength;
         float baseBulletSpeed;
+        float baseStunPower;
         int baseBulletsPerTap;
         int baseMagazineSize;
         //barial
@@ -60,7 +61,7 @@ public class Gun : ScriptableObject
         canPenetrate = magazine.canPenetrate;
 
         baseMagazineSize = magazine.baseMagazineSize;
-
+        baseStunPower = magazine.baseStun;
         //Add all the Modifier
         damage = baseDamage * chamber.DamageModifier(baseDamage) * magazine.DamageModifier(baseDamage)* mod.DamageModifier();
         fireRate = baseFireRate * chamber.FireRateModifier(baseFireRate) * mod.FireRateModifier();
@@ -71,7 +72,7 @@ public class Gun : ScriptableObject
         knockbackStrength = baseKnockbackStrength * magazine.KnockbackStrengthModifier(baseKnockbackStrength)*mod.KnockbackStrengthModifier();
         bulletsPerTap = baseBulletsPerTap * mod.BulletPerTapModifier();
         magazineSize = baseMagazineSize * mod.MagazineSizeModifier();
-
+        stunPower = baseStunPower;
         //For Prefab Bullet
         if (magazine.bulletPrefab != null)
         {
@@ -97,6 +98,10 @@ public class Gun : ScriptableObject
     public float getRange()
     {
         return range;
+    }
+    public float getStunPower()
+    {
+        return stunPower;
     }
     public float getReloadTime()
     {

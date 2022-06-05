@@ -12,6 +12,7 @@ public class BulletPrefab : MonoBehaviour
     protected float knockbackStrength;
     protected float damage;
     protected float bulletSpeed;
+    protected float stunPower;
 
     protected Vector3 firePosition;
     protected Vector3 knockbackDirection;
@@ -19,7 +20,6 @@ public class BulletPrefab : MonoBehaviour
     public GameObject muzzleFlash;
     public GameObject explosion;
     public LayerMask whatIsEnemy;
-
 
 
     ////Mod
@@ -65,6 +65,10 @@ public class BulletPrefab : MonoBehaviour
     public void setModFunction3(ModFunction.Effect function3)
     {
         f3 = function3;
+    }
+    public void setStunPower(float stun)
+    {
+        stunPower = stun;
     }
     //Mod
     protected virtual void EffectOnHit()

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.AI;
 
 public class Firearm : MonoBehaviour
 {
@@ -204,8 +205,13 @@ public class Firearm : MonoBehaviour
                 EffectOnHit(rayHit.transform.position);
                 Rigidbody rb = rayHit.transform.gameObject.GetComponent<Rigidbody>();
                 direction.y = 0;
-                rb.AddForce(direction.normalized * gun.getKnockbackStrength(), ForceMode.Impulse);
                 target.TakeDamage(gun.getDamege());
+                target.gameObject.GetComponent<Target>().Stun(gun.getStunPower());
+                rb.AddForce(direction.normalized * gun.getKnockbackStrength(), ForceMode.Impulse);
+                if (target.gameObject.GetComponent<NavMeshAgent>().isActiveAndEnabled && target.gameObject.GetComponent<Target>().IsStun())
+                {
+                    target.gameObject.GetComponent<NavMeshAgent>().enabled = false;
+                }
             }
             //GFX
             Instantiate(HitEffect, rayHit.point, Quaternion.Euler(0, 180, 0));
@@ -257,8 +263,13 @@ public class Firearm : MonoBehaviour
                     target = hit.transform.GetComponent<Target>();
                     rb = hit.transform.gameObject.GetComponent<Rigidbody>();
                     direction.y = 0;
-                    rb.AddForce(direction.normalized * gun.getKnockbackStrength(), ForceMode.Impulse);
                     target.TakeDamage(gun.getDamege());
+                    target.gameObject.GetComponent<Target>().Stun(gun.getStunPower());
+                    rb.AddForce(direction.normalized * gun.getKnockbackStrength(), ForceMode.Impulse);
+                    if (target.gameObject.GetComponent<NavMeshAgent>().isActiveAndEnabled && target.gameObject.GetComponent<Target>().IsStun())
+                    {
+                        target.gameObject.GetComponent<NavMeshAgent>().enabled = false;
+                    }
                 }
                 EffectOnHit(hit.point);
                 //Graphics

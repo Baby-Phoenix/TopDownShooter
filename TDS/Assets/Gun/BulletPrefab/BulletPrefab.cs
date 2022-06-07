@@ -82,7 +82,8 @@ public class BulletPrefab : MonoBehaviour
                 {
                     if (enemies[i].GetComponent<Rigidbody>() && enemies[i].tag == "Enemy")
                     {
-                        if (enemies[i].gameObject.GetComponent<NavMeshAgent>().isActiveAndEnabled)
+                        enemies[i].gameObject.GetComponent<Target>().Stun(stunPower);
+                        if (enemies[i].gameObject.GetComponent<NavMeshAgent>().isActiveAndEnabled&& enemies[i].gameObject.GetComponent<Target>().IsStun())
                         {
                             enemies[i].gameObject.GetComponent<NavMeshAgent>().enabled = false;
                         }
@@ -98,8 +99,13 @@ public class BulletPrefab : MonoBehaviour
                 Collider[] enemies = Physics.OverlapSphere(transform.position, 5, whatIsEnemy);
                 for (int i = 0; i < enemies.Length; i++)
                 {
-                    if (enemies[i].GetComponent<Rigidbody>()&& enemies[i].tag == "Enemy")
+                    if (enemies[i].GetComponent<Rigidbody>() && enemies[i].tag == "Enemy")
                     {
+                        enemies[i].gameObject.GetComponent<Target>().Stun(stunPower);
+                        if (enemies[i].gameObject.GetComponent<NavMeshAgent>().isActiveAndEnabled && enemies[i].gameObject.GetComponent<Target>().IsStun())
+                        {
+                            enemies[i].gameObject.GetComponent<NavMeshAgent>().enabled = false;
+                        }
                         enemies[i].GetComponent<Rigidbody>().AddExplosionForce(50, transform.position, 5);
                     }
                 }
@@ -114,6 +120,11 @@ public class BulletPrefab : MonoBehaviour
                 {
                     if (enemies[i].GetComponent<Rigidbody>() && enemies[i].tag == "Enemy")
                     {
+                        enemies[i].gameObject.GetComponent<Target>().Stun(stunPower);
+                        if (enemies[i].gameObject.GetComponent<NavMeshAgent>().isActiveAndEnabled && enemies[i].gameObject.GetComponent<Target>().IsStun())
+                        {
+                            enemies[i].gameObject.GetComponent<NavMeshAgent>().enabled = false;
+                        }
                         enemies[i].GetComponent<Rigidbody>().AddExplosionForce(50, transform.position, 5);
                     }
                 }

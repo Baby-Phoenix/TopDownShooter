@@ -42,5 +42,8 @@ public class BoltBullet : BulletPrefab
     {
         return damage;
     }
-
+    public float getStun()
+    {
+        return stunPower;
+    }
 }

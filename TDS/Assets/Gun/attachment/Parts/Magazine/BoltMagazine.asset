@@ -20,3 +20,4 @@ MonoBehaviour:
   knockbackStrengthModifer: 0.5
   damageModifer: 0
   baseBulletSpeed: 14
+  baseStun: 1

@@ -15,7 +15,6 @@ public class WarheadBullet : BulletPrefab
             if (rb != null && collision.gameObject.tag == "Enemy") 
             {
                 collision.gameObject.GetComponent<Target>().TakeDamage(damage);
-                Debug.Log(stunPower);
                 collision.gameObject.GetComponent<Target>().Stun(stunPower);
                 rb.AddForce(knockbackDirection * knockbackStrength, ForceMode.Impulse);
                 if (collision.gameObject.GetComponent<NavMeshAgent>().isActiveAndEnabled&& collision.gameObject.GetComponent<Target>().IsStun())

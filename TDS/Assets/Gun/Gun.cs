@@ -23,9 +23,68 @@ public class Gun : ScriptableObject
 
     private bool isRaycast,isShotgun, isHandloaded, canPenetrate;
 
+    private void OnEnable()
+    {
+        Target.AddXP += AddingXp;
+    }
+    private void OnDisable()
+    {
+        Target.AddXP -= AddingXp;
+    }
 
+    public void resetLevelToOne()
+    {
+        barrel.resetLevelToOne();
+        chamber.resetLevelToOne();
+        scope.resetLevelToOne();
+        magazine.resetLevelToOne();
+        stock.resetLevelToOne();
+        mod.resetLevelToOne();
+    }
+    public void AddingXp(int xp)
+    {
+        barrel.AddXp(xp);
+        chamber.AddXp(xp);
+        scope.AddXp(xp);
+        magazine.AddXp(xp);
+        stock.AddXp(xp);
+        mod.AddXp(xp);
+    }
+    public void setXpZero()
+    {
+        barrel.setXpZero();
+        chamber.setXpZero();
+        scope.setXpZero();
+        magazine.setXpZero();
+        stock.setXpZero();
+        mod.setXpZero();
+    }
     public void GunUpdate()
     {
+        if (barrel.isLevelUp())
+        {
+            barrel.setXpZero();
+        }
+        if (chamber.isLevelUp())
+        {
+            chamber.setXpZero();
+        }
+        if (scope.isLevelUp())
+        {
+            scope.setXpZero();
+        }
+        if (magazine.isLevelUp())
+        {
+            magazine.setXpZero();
+        }
+        if (stock.isLevelUp())
+        {
+            stock.setXpZero();
+        }
+        if (mod.isLevelUp())
+        {
+            mod.setXpZero();
+        }
         float baseDamage;
         float baseFireRate;
         float baseSpread;

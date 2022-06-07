@@ -16,8 +16,44 @@ public class BarrelAttachment : ScriptableObject
     public int   baseBulletsPerTap;
     public bool  isShotgun;
 
+    public int XPToLevelUp;
+    private int XP=0;
+    int level = 1;
     public virtual float BulletSpeedModifer(float bulletSpeed)
     {
         return bulletSpeedModifer + 1;
+    }
+
+    public void AddXp(int xp)
+    {
+        XP = XP + xp;
+    }
+    public void setXpZero()
+    {
+        if (level != 10)
+        {
+            level = level + 1;
+            XP = 0;
+        }
+        else
+        {
+            XP = 0;
+        }
+    }
+    public void resetLevelToOne()
+    {
+        level = 1;
+        XP = 0;
+    }
+    public bool isLevelUp()
+    {
+        if (XP >= XPToLevelUp)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

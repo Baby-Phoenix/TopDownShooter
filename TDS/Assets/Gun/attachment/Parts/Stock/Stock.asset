@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: Stock
   m_EditorClassIdentifier: 
   spreadModifier: 0.2
+  XPToLevelUp: 20

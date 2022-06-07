@@ -15,3 +15,4 @@ MonoBehaviour:
   f1: {fileID: 11400000, guid: 7a0c5a9ee055d4d44a1230a48b2621ca, type: 2}
   f2: {fileID: 11400000, guid: e4d00eeec5ba1464baeaa37c2049372d, type: 2}
   f3: {fileID: 11400000, guid: 2d0bed30a0db1734ea9070e8c172fce8, type: 2}
+  XPToLevelUp: 20

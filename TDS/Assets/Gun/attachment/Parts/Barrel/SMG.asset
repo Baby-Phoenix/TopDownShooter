@@ -22,3 +22,4 @@ MonoBehaviour:
   bulletSpeedModifer: 0
   baseBulletsPerTap: 1
   isShotgun: 0
+  XPToLevelUp: 20

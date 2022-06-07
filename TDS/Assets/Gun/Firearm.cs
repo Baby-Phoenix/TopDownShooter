@@ -37,9 +37,11 @@ public class Firearm : MonoBehaviour
     private void Awake()
     {
         gun.GunUpdate();
+        gun.resetLevelToOne();
         ConstantEffect();
         bulletsLeft = gun.getMagazineSize();
         readyToShoot = true;
+
     }
 
     private void Update()
@@ -252,7 +254,7 @@ public class Firearm : MonoBehaviour
             }
         }
 
-        hits = Physics.RaycastAll(shootingPoint.position, direction, gun.getRange(), whatIsEnemy);
+        hits = Physics.RaycastAll(shootingPoint.position, direction, gun.getRange());
         if (hits != null)
         {
             for (int i = 0; i < hits.Length; i++)
@@ -271,6 +273,7 @@ public class Firearm : MonoBehaviour
                         target.gameObject.GetComponent<NavMeshAgent>().enabled = false;
                     }
                 }
+                Debug.Log("hit");
                 EffectOnHit(hit.point);
                 //Graphics
                 Instantiate(HitEffect, hit.point, Quaternion.Euler(0, 180, 0));
@@ -345,7 +348,7 @@ public class Firearm : MonoBehaviour
         {
             case ModFunction.Effect.Explosive:
                 if (explosion != null) Instantiate(explosion, hitPoint, Quaternion.identity);
-                Collider[] enemies = Physics.OverlapSphere(hitPoint, 5, whatIsEnemy);
+                Collider[] enemies = Physics.OverlapSphere(hitPoint, 5);
                 for (int i = 0; i < enemies.Length; i++)
                 {
                     if (enemies[i].GetComponent<Rigidbody>())

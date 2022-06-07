@@ -32,6 +32,10 @@ public class ModAttachment : ScriptableObject
     //For mode Function
     private bool DualModeOn = false;
     private bool OrbiterOn = false;
+
+    public int XPToLevelUp;
+    private int XP=0;
+    int level = 1;
     public void setModAttachmentModifier()
     {
         damageModifier = (1+f1.damageModifier) * (1 + f2.damageModifier) * (1 + f3.damageModifier);
@@ -143,5 +147,37 @@ public class ModAttachment : ScriptableObject
     public bool GetOrbiterOn()
     {
         return OrbiterOn;
+    }
+    public void AddXp(int xp)
+    {
+        XP = XP + xp;
+    }
+    public void setXpZero()
+    {
+        if (level != 10)
+        {
+            level = level + 1;
+            XP = 0;
+        }
+        else
+        {
+            XP = 0;
+        }
+    }
+    public void resetLevelToOne()
+    {
+        level = 1;
+        XP = 0;
+    }
+    public bool isLevelUp()
+    {
+        if (XP >= XPToLevelUp)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

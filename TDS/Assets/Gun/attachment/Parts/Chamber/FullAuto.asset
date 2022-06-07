@@ -16,3 +16,5 @@ MonoBehaviour:
   isHandLoaded: 0
   damageModifer: 0
   fireRateModifer: 0.1
+  reloadTimeModifer: 0
+  XPToLevelUp: 20

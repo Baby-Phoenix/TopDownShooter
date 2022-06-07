@@ -17,7 +17,7 @@ MonoBehaviour:
   isRaycast: 0
   canPenetrate: 0
   baseMagazineSize: 30
-  knockbackStrengthModifer: 0
+  knockbackStrengthModifer: 0.5
   damageModifer: 0
   baseBulletSpeed: 8
   baseStun: 1

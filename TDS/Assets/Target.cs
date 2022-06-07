@@ -11,6 +11,11 @@ public class Target : MonoBehaviour
     public float stunResistance = 3;
     public float stunPoint = 0;
     public bool stuning=false;
+    public int XP;
+
+    //exp system
+    public delegate void OnKillingEnemy(int xp);
+    public static event OnKillingEnemy AddXP;
     public void TakeDamage(float amount)
     {
         health -= amount;
@@ -25,6 +30,10 @@ public class Target : MonoBehaviour
     }
     void Die()
     {
+        if(AddXP != null)
+        {
+            AddXP(XP);
+        }
         Destroy(gameObject);
     }
 

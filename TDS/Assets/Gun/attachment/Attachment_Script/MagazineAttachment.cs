@@ -18,6 +18,10 @@ public class MagazineAttachment : ScriptableObject
     public float baseBulletSpeed;// For Prefab Bullet 
 
     public float baseStun;
+
+    public int XPToLevelUp;
+    private int XP=0;
+    int level = 1;
     public virtual float DamageModifier(float baseDamage)
     {
         return 1+ damageModifer;
@@ -26,5 +30,37 @@ public class MagazineAttachment : ScriptableObject
     public virtual float KnockbackStrengthModifier(float baseKnockbackStrengthModifer)
     {
         return 1 + knockbackStrengthModifer ;
+    }
+    public void AddXp(int xp)
+    {
+        XP = XP + xp;
+    }
+    public void setXpZero()
+    {
+        if (level != 10)
+        {
+            level = level + 1;
+            XP = 0;
+        }
+        else
+        {
+            XP = 0;
+        }
+    }
+    public void resetLevelToOne()
+    {
+        level = 1;
+        XP = 0;
+    }
+    public bool isLevelUp()
+    {
+        if (XP >= XPToLevelUp)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

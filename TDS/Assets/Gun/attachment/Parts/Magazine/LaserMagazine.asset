@@ -15,8 +15,9 @@ MonoBehaviour:
   bulletPrefab: {fileID: 0}
   isRaycast: 1
   canPenetrate: 1
-  baseMagazineSize: 15
-  knockbackStrengthModifer: 0.5
+  baseMagazineSize: 30
+  knockbackStrengthModifer: 0.1
   damageModifer: 0
   baseBulletSpeed: 0
   baseStun: 1
+  XPToLevelUp: 20

@@ -12,6 +12,7 @@ public class EnemyMovement : MonoBehaviour
     public float updateSpeed = 0.1f; //How frequently to recalculate path based on target transform's position
 
     public LayerMask detectionLayer;
+    public LayerMask obstructionLayer;
     public float detectionRadius = 10;
     public float detectionAngle = 20;
 
@@ -66,7 +67,11 @@ public class EnemyMovement : MonoBehaviour
 
                 if (viewableAngle > -detectionAngle / 2 && viewableAngle < detectionAngle / 2)
                 {
-                    currentTarget = twinStickMovement;
+                    float distanceToTarget = Vector3.Distance(transform.position, twinStickMovement.transform.position);
+
+                    //See if target is within eyesight
+                    if(!Physics.Raycast(transform.position, targetDirection, distanceToTarget, obstructionLayer))
+                        currentTarget = twinStickMovement;
                 }
             }
         }

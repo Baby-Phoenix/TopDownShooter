@@ -17,20 +17,19 @@ public class TwinStickMovement : MonoBehaviour
     [SerializeField] private LayerMask groundMask;
 
     public Animator anim;
+    float velocityZ = 0.0f, velocityX = 0.0f;
 
     [SerializeField] private bool isGamepad;
 
     private Camera mainCamera;
     private CharacterController controller;
     private bool isJump = false;
-    private bool isGrounded = false;
 
     [SerializeField] private float jump;
     private Vector2 movement;
     private Vector2 aim;
 
     private Vector3 playerVelocity;
-
 
     private PlayerControls playerControls;
     private PlayerInput playerInput;
@@ -71,10 +70,14 @@ public class TwinStickMovement : MonoBehaviour
     {
         movement = playerControls.Controls.Movement.ReadValue<Vector2>();
         aim = playerControls.Controls.Aim.ReadValue<Vector2>();
-        
-        if (!isJump) 
+
         jump = playerControls.Controls.Jump.ReadValue<float>();
+        isJump = jump > 0 && !isJump;
+
     }
+
+
+
 
     void HandleMovement()
     {
@@ -82,58 +85,70 @@ public class TwinStickMovement : MonoBehaviour
 
         if (isTopDown)
         {
-
-            //take off jump from here
-
-            if (jump > 0)
-                isJump = true;
-            else
-                isJump = false;
-
-            move = new Vector3(movement.x, jump, movement.y);
-            anim.SetBool("IsJump", isJump);
+            move = new Vector3(movement.x, 0, movement.y);
         }
         else
         {
-            if (jump > 0)
-                isJump = true;
-            else
-                isJump = false;
-
             move = new Vector3(movement.x, jump, 0);
-            anim.SetBool("IsJump", isJump);
         }
 
-       
         controller.Move(move * Time.deltaTime * playerSpeed);
-        anim.SetBool("IsRun", move.magnitude > 0);
+        GetComponent<PlayerSideScrollAim>().mousePos = aim;
 
+        HandleAnimation();
+    }
 
-        playerVelocity.y += gravityValue * Time.deltaTime;
-        controller.Move(playerVelocity * Time.deltaTime);
+    void HandleAnimation()
+    {
 
-        isGrounded = false;
+        //checking the input value for jump and setting it to the bool
 
+        // ****Might have to use animation events for this one*********
         if (controller.isGrounded)
         {
-            playerVelocity.y = 0; 
+           // Debug.Log("Player is grounded");
+            playerVelocity.y = 0;
             isJump = false;
-            isGrounded = true;
+
+        }
+        else
+        {
+          //  Debug.Log("Player is not grounded");
+            playerVelocity.y += gravityValue * Time.deltaTime;
+            controller.Move(playerVelocity * Time.deltaTime);
         }
 
-        anim.SetFloat("yVelocity", playerVelocity.y);
-        anim.SetBool("IsGround", isGrounded);
+       // Debug.Log(controller.velocity.y);
+
+
+        //WASD variable  W = 1y, S = -1y, A = -1x, D = 1x
+
+        // Forward vector UP IS 0,3  DOWN IS 0,-3  RIGHT IS 3,0   LEFT IS -3,0
+
+        //(Forward vector + WASD VARIABLE)*WASD VARIABLE = ANIMATION VELOCITY X, Z
+
+        Vector2 forwardvector = new Vector2(transform.forward.x * 3, transform.forward.z * 3);
+
+        velocityX = (forwardvector.x - movement.x) * movement.x;
+        velocityZ = (forwardvector.y - movement.y) * movement.y;
+
+        anim.SetBool("IsJump", isJump);
+        anim.SetBool("IsGround", controller.velocity.y <= 0);
+        anim.SetFloat("Velocity X", velocityX);
+        anim.SetFloat("Velocity Y", controller.velocity.y);
+        anim.SetFloat("Velocity Z", velocityZ);
+
     }
 
     void HandleRotation()
     {
         if (isGamepad)
         {
-            if(Mathf.Abs(aim.x) > controllerDeadZone || Mathf.Abs(aim.y) > controllerDeadZone)
+            if (Mathf.Abs(aim.x) > controllerDeadZone || Mathf.Abs(aim.y) > controllerDeadZone)
             {
                 Vector3 playerDirection = Vector3.right * aim.x + Vector3.forward * aim.y;
 
-                if(playerDirection.sqrMagnitude > 0.0f)
+                if (playerDirection.sqrMagnitude > 0.0f)
                 {
                     Quaternion newRotation = Quaternion.LookRotation(playerDirection, Vector3.up);
                     transform.rotation = Quaternion.RotateTowards(transform.rotation, newRotation, gamepadRotateSmoothing * Time.deltaTime);
@@ -157,7 +172,7 @@ public class TwinStickMovement : MonoBehaviour
                 //}
 
                 var (success, position) = GetMousePosition();
-                if(success)
+                if (success)
                 {
                     //Calculate the direction
                     var direction = position - transform.position;
@@ -166,7 +181,7 @@ public class TwinStickMovement : MonoBehaviour
 
                     //Make transform look in the direction
                     transform.forward = direction;
-                    transform.Find("Fire_point").forward = direction;
+                    firePoint.forward = direction;
                 }
             }
             else
@@ -184,7 +199,7 @@ public class TwinStickMovement : MonoBehaviour
     {
         var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
-        if(Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, groundMask))
+        if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, groundMask))
         {
             //Raycast hit something and returns position
             return (success: true, position: hitInfo.point);

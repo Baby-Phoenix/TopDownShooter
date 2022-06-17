@@ -76,7 +76,10 @@ public class TwinStickMovement : MonoBehaviour
 
     }
 
-
+    public bool TopDown()
+    {
+        return isTopDown;
+    }
 
 
     void HandleMovement()

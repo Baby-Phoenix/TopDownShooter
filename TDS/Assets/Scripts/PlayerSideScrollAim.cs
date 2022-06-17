@@ -13,20 +13,23 @@ public class PlayerSideScrollAim : MonoBehaviour
 
     private void Update()
     {
-        ////**** USE THE YOUTUBE VIDEO FOR THE MOUSE POSITION
-        Ray ray = Camera.main.ScreenPointToRay(mousePos);
-
-        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, aimMask))
+        if (!GetComponent<TwinStickMovement>().TopDown())
         {
-            aimPos.position = Vector3.Lerp(aimPos.position, hit.point, aimSmoothSpeed * Time.deltaTime);
-            aimPos.position = new Vector3(aimPos.position.x, aimPos.position.y, firePos.position.z);
+            Ray ray = Camera.main.ScreenPointToRay(mousePos);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, aimMask))
+            {
+                aimPos.position = Vector3.Lerp(aimPos.position, hit.point, aimSmoothSpeed * Time.deltaTime);
+                aimPos.position = new Vector3(aimPos.position.x, aimPos.position.y, firePos.position.z);
+            }
+
+            HandleAngleFormation();
         }
 
-        //Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-        //    aimPos.position = new Vector3(pos.x, pos.y, transform.position.z);
-
-        HandleAngleFormation();
+        //if it is topdown the angle doesnt matter and is set to 0 to look straight 
+        else
+            GetComponent<TwinStickMovement>().anim.SetFloat("Aim", 0);
+        
     }
 
     void HandleAngleFormation()

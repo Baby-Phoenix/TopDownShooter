@@ -34,7 +34,7 @@ public class TwinStickMovement : MonoBehaviour
     private PlayerControls playerControls;
     private PlayerInput playerInput;
 
-    public static bool isTopDown = true;
+   [SerializeField] public static bool isTopDown = true;
 
     private void Awake()
     {

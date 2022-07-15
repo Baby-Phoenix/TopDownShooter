@@ -105,6 +105,8 @@ public class TwinStickMovement : MonoBehaviour
         }
 
         controller.Move(move * Time.deltaTime * playerSpeed);
+        //transform.Translate(0.0f, 0.0f, Time.deltaTime * playerSpeed * Input.GetAxis("Vertical"));
+        //transform.Translate(Time.deltaTime * playerSpeed * Input.GetAxis("Horizontal"), 0.0f, 0.0f);
         GetComponent<PlayerSideScrollAim>().mousePos = aim;
 
         HandleAnimation();
@@ -130,24 +132,20 @@ public class TwinStickMovement : MonoBehaviour
             controller.Move(playerVelocity * Time.deltaTime);
         }
 
-       // Debug.Log(controller.velocity.y);
+        Vector3 moveDirection = new Vector3(movement.x, 0, movement.y);
 
+        if (moveDirection.magnitude > 1.0f)
+        {
+            moveDirection = moveDirection.normalized;
+        }
 
-        //WASD variable  W = 1y, S = -1y, A = -1x, D = 1x
-
-        // Forward vector UP IS 0,3  DOWN IS 0,-3  RIGHT IS 3,0   LEFT IS -3,0
-
-        //(Forward vector + WASD VARIABLE)*WASD VARIABLE = ANIMATION VELOCITY X, Z
-
-        Vector2 forwardvector = new Vector2(transform.forward.x * 3, transform.forward.z * 3);
-
-        velocityX = (forwardvector.x - movement.x) * movement.x;
-        velocityZ = (forwardvector.y - movement.y) * movement.y;
+        moveDirection = transform.InverseTransformDirection(moveDirection);
 
         anim.SetBool("IsJump", isJump);
-        anim.SetFloat("Velocity X", velocityX);
-        anim.SetFloat("Velocity Y", controller.velocity.y);
-        anim.SetFloat("Velocity Z", velocityZ);
+        anim.SetBool("IsGround", controller.velocity.y <= 0);
+        anim.SetFloat("Velocity X", moveDirection.x, 0.05f, Time.deltaTime);
+        anim.SetFloat("Velocity Y", controller.velocity.y, 0.05f, Time.deltaTime);
+        anim.SetFloat("Velocity Z", moveDirection.z, 0.05f, Time.deltaTime);
 
     }
 

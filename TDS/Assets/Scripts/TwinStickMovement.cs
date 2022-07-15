@@ -23,7 +23,10 @@ public class TwinStickMovement : MonoBehaviour
 
     private Camera mainCamera;
     private CharacterController controller;
+
+
     private bool isJump = false;
+    public float jumpForce = 4;
 
     [SerializeField] private float jump;
     private Vector2 movement;
@@ -71,7 +74,7 @@ public class TwinStickMovement : MonoBehaviour
         movement = playerControls.Controls.Movement.ReadValue<Vector2>();
         aim = playerControls.Controls.Aim.ReadValue<Vector2>();
 
-        jump = playerControls.Controls.Jump.ReadValue<float>();
+        jump = playerControls.Controls.Jump.ReadValue<float>()*4;
         isJump = jump > 0 && !isJump;
 
     }
@@ -81,11 +84,17 @@ public class TwinStickMovement : MonoBehaviour
         return isTopDown;
     }
 
+    public bool isGrounded()
+    {
+        //the player's center is different from the actual center thus messing up the raycast calculation
+        bool ground = Physics.Raycast(transform.position, -transform.up, 0.01f, groundMask);
+        anim.SetBool("IsGround", ground);
+        return ground;
+    }
 
     void HandleMovement()
     {
         Vector3 move;
-
         if (isTopDown)
         {
             move = new Vector3(movement.x, 0, movement.y);
@@ -107,9 +116,9 @@ public class TwinStickMovement : MonoBehaviour
         //checking the input value for jump and setting it to the bool
 
         // ****Might have to use animation events for this one*********
-        if (controller.isGrounded)
+        if (isGrounded())
         {
-           // Debug.Log("Player is grounded");
+            // Debug.Log("Player is grounded");
             playerVelocity.y = 0;
             isJump = false;
 
@@ -136,7 +145,6 @@ public class TwinStickMovement : MonoBehaviour
         velocityZ = (forwardvector.y - movement.y) * movement.y;
 
         anim.SetBool("IsJump", isJump);
-        anim.SetBool("IsGround", controller.velocity.y <= 0);
         anim.SetFloat("Velocity X", velocityX);
         anim.SetFloat("Velocity Y", controller.velocity.y);
         anim.SetFloat("Velocity Z", velocityZ);
@@ -200,7 +208,7 @@ public class TwinStickMovement : MonoBehaviour
 
     private (bool success, Vector3 position) GetMousePosition()
     {
-        var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        var ray = mainCamera.ScreenPointToRay(aim);
 
         if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, groundMask))
         {
@@ -225,4 +233,10 @@ public class TwinStickMovement : MonoBehaviour
         isGamepad = pi.currentControlScheme.Equals("Gamepad") ? true : false;
     }
 
+    private void OnDrawGizmos()
+    {
+        Vector3 to = new Vector3(transform.position.x, transform.position.y - .01f, transform.position.z);
+        Gizmos.color = Color.black;
+        Gizmos.DrawLine(transform.position, to);
+    }
 }
